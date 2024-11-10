@@ -7,17 +7,17 @@
 char* zipstring(char *str);
 int main(int argc, char *argv[])
 {
-   char *s = "yank thhheeee yank but   leave the blank.";
+   //char *s = "yank thhheeee yank but   leave the blank.";
    //char *s = "YouuungFellllas";
-   //char *s = "Thee quuick browwn fox juumps over the laaazy dog";
+   char *s = "Thee quuick browwn fox juumps over the laaazy dog";
    //char *s = "Helloo Therre!";
-   printf("orig: %d\n%s\n", strlen(s), s);
+   printf("original string: strlen: %d\n%s\n", strlen(s),s);
    char *mod = zipstring(s);
    if (mod == 0) {
    	fprintf(stderr, "zipstring returned null.\n");
    	return EXIT_FAILURE;
    }
-   printf("zipped: %d\n%s\n", strlen(mod),mod);
+   printf("zipped: strlen: %d\n%s\n", strlen(mod),mod);
    free(mod);
    return EXIT_SUCCESS;
 }
@@ -34,29 +34,33 @@ char* zipstring(char *str)
    }
    char *delim = " ";
    char *token, *saveptr;
+   // total_len: stores the final length of zipped string.
+   // len: stores intermediate length of tokens (space delimited words).
+   // j: accumulates tokens parsed.
    int total_len = 0, len, j;
    for (j = 0, len = 0; ; dupstr = 0, j++, len = 0) {
       token = strtok_r(dupstr,delim,&saveptr);
       if (token == 0) break;
-      //printf("--------%s\n", token);
+      //printf("token: >%s<\n", token);
       char *t;
-      for (t = token; *t != 0; t++) bytes[*t]++;
-      for (t = token; *t != 0; t++) {
-         if(bytes[*t] != 0) 
+      for (t = token; *t != 0; t++) bytes[*t]++; // count frequency of chars
+      // note that I zero frequency value of character after each iteration.
+      for (t = token; *t != 0; bytes[*t++] = 0) {
+         if(bytes[*t] != 0) // cannot take log of zero
             len +=  (int)log10(bytes[*t]) + 1;
-         else ++len; // to account for the duplicate character
-         bytes[*t] = 0; // zero entries for next token
       }
-      len += t - token + 1; // +1 for string initializer 
-      //printf("len = %d\n", len);
+      // len now has the number of digits to be added to string
+      // next I add the actual number of chars. E.g. "here" has 4 chars,
+      // plus 4 digits, so length of final string will be 8: "1h1e1r1e"
+      len += t - token;
       total_len += len;
    }
    if (temp !=0) free(temp); // temp pointing to dupstr
-   // I have j blanks for the words, add one for string initializer.
+   // I'll remove j amount from total length since I'll add the length
+   // of the original string to account for unaccounted number of blanks.
    // below statement is equivalent to total_len = total_len - (j - 1)
    total_len -= j - 1;
-   total_len += strlen(str); // to account for a max # of blanks.
-   //printf("\nj = %d, total_len = %d\n", j, total_len);
+   total_len += strlen(str);
    // zip string
    char *zippedstring = (char*) malloc(total_len);
    char *z = zippedstring, *t = str;
@@ -72,5 +76,6 @@ char* zipstring(char *str)
          sp = 0;
       }
    }
+   *z = '\0';
    return zippedstring;
 }
