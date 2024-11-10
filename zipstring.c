@@ -1,9 +1,9 @@
 /* Fri Nov  8 10:41:17 PM IST 2024 */
 /* By: Victor Nammour */
 #include <stdio.h>
-#include <math.h>
+#include <math.h>   // for log10
 #include <string.h> // for strtok, strlen
-#include <stdlib.h>
+#include <stdlib.h> // for malloc
 char* zipstring(char *str);
 int main(int argc, char *argv[])
 {
