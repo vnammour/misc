@@ -4,12 +4,13 @@
 #include <math.h>   // for log10
 #include <string.h> // for strtok, strlen
 #include <stdlib.h> // for malloc
+#include <ctype.h>
 char* zipstring(char *str);
 int main(int argc, char *argv[])
 {
-   //char *s = "yank thhheeee yank but   leave the blank.";
+   char *s = "yank thhheeee yank but   leave  tthe blannk..";
    //char *s = "YouuungFellllas";
-   char *s = "Thee quuick browwn fox juumps over the laaazy dog";
+   //char *s = "Thee quuick browwn fox juumps over the laaazy dog";
    //char *s = "Helloo Therre!";
    printf("original string: strlen: %d\n%s\n", strlen(s),s);
    char *mod = zipstring(s);
@@ -49,6 +50,7 @@ char* zipstring(char *str)
       for (t = token; *t != 0; bytes[*t++] = 0) {
          if(bytes[*t] != 0) // cannot take log of zero
             len +=  (int)log10(bytes[*t]) + 1;
+         else ++len; // to account for the digit to come before that char that reappears.
       }
       // len now has the number of digits to be added to string
       // next I add the actual number of chars. E.g. "here" has 4 chars,
@@ -57,12 +59,11 @@ char* zipstring(char *str)
       total_len += len;
    }
    if (temp !=0) free(temp); // temp pointing to dupstr
-   // I'll remove j amount from total length since I'll add the length
-   // of the original string to account for unaccounted number of blanks.
-   // Alternate to adding length of original string, I can loop over it
-   // and count number of blanks.
-   total_len -= j - 1;
-   total_len += strlen(str);
+   // Looping over string and adding number of blanks.
+   j = 0;
+   for (char *t = str; *t != '\0'; ++t) if (isspace(*t)) ++j;
+   total_len += j + 1; // +1 for string initializer.
+   //printf("total_len = %d\n", total_len);
    // zip string
    char *zippedstring = (char*) malloc(total_len);
    char *z = zippedstring, *t = str;
