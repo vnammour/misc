@@ -52,7 +52,7 @@ char* zipstring(char *str)
             len +=  (int)log10(bytes[*t]) + 1;
          else ++len; // to account for the digit to come before that char that reappears.
       }
-      // len now has the number of digits to be added to string
+      // len now has the length of the digits to be added to string
       // next I add the actual number of chars. E.g. "here" has 4 chars,
       // plus 4 digits, so length of final string will be 8: "1h1e1r1e"
       len += t - token;
