@@ -11,7 +11,7 @@
 int parseargs(int argc, char **argv, int **numarr, int *sum)
 {
   *numarr = 0; // initialize to null
-  static char *usage = "findpairs \"[number,number...]\" \"sum\"\n";
+  static char *usage = "Usage: findpairs \"[number,number...]\" \"sum\"\n";
   static char *invalidInput = "Invalid input";
   static char *invalidTargetSum = "Invalid target sum";
   static char *invalidNumber = "Invalid number";	
@@ -23,14 +23,17 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
   // get the target sum
   errno = 0;	
   char *endptr;
-  *sum = strtol(argv[--argc], &endptr, 10);
+  if (strlen(argv[--argc]) == 0) { // now argc = 2
+     fprintf(stderr,"%s\n", invalidTargetSum);
+     return -1;
+  }
+  *sum = strtol(argv[argc], &endptr, 10);
   if (*endptr != 0) {
      fprintf(stderr,"%s: %s\n", invalidTargetSum,argv[argc]);
      return -1;
   }
   // get the number array
-  --argc; // Now has a value of 1
-  int len = strlen(argv[argc]);	
+  int len = strlen(argv[--argc]); // now argc = 1
   // truncate string at terminating ']'
   char *p = argv[argc] + len;
   while (isspace(*--p));
@@ -39,6 +42,10 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
      return -1;
   }
   *p = '\0';
+  if (!isdigit(p[-1])) { // Right before ']' should be a digit.
+     fprintf(stderr,"%s\n", invalidInput);
+     return -1;
+  }
   // skip blanks at beginning if any.
   argv +=argc; // to make argv point at array
   while (isspace(*argv[0])) ++*argv;
