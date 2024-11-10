@@ -38,6 +38,7 @@ char* zipstring(char *str)
    // len: stores intermediate length of tokens (space delimited words).
    // j: accumulates tokens parsed.
    int total_len = 0, len, j;
+   // The idea here is to calculate the approximate size of the final zipped str.
    for (j = 0, len = 0; ; dupstr = 0, j++, len = 0) {
       token = strtok_r(dupstr,delim,&saveptr);
       if (token == 0) break;
@@ -58,7 +59,8 @@ char* zipstring(char *str)
    if (temp !=0) free(temp); // temp pointing to dupstr
    // I'll remove j amount from total length since I'll add the length
    // of the original string to account for unaccounted number of blanks.
-   // below statement is equivalent to total_len = total_len - (j - 1)
+   // Alternate to adding length of original string, I can loop over it
+   // and count number of blanks.
    total_len -= j - 1;
    total_len += strlen(str);
    // zip string
