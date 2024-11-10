@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
    else {
       printf("[");
       for (node *h = ans; h != 0; h = h->next)
-         printf("[%d,%d]%s", h->first,h->second, h->next != 0 ? ",":"]\n");
+         printf("[%d,%d]%s", h->first,h->second, h->next != 0 ? " ":"]\n");
    }
 }
 static node *add(node *p, int i, int j)
