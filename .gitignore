@@ -1,3 +1,20 @@
+#directories
+gopl.io
+
+#temp files
+temp/
+temp/*
+
+# Python
+.DS_Store
+*.pyc
+*~
+\#*\#
+.idea
+__pycache__/
+*.log
+venv/
+
 # Prerequisites
 *.d
 
