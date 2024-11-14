@@ -7,6 +7,8 @@
 #include <errno.h>  // for errno
 /* returns -1 for invalid input; otherwise returns length of array.
    sum's value is stored in sum, and number array in *numarr.
+   numarr in form (e.g.): "[1,2,3,4]".
+   But I allow spaces before and after the '[', ']', and the commas and digits.
 */
 int parseargs(int argc, char **argv, int **numarr, int *sum)
 {
@@ -42,7 +44,10 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
      return -1;
   }
   *p = '\0';
-  if (!isdigit(p[-1])) { // Right before ']' should be a digit.
+  // Right before ']' should be a digit, or spaces then digit
+  while (isspace(*--p));
+  //printf("vjn: *p = >%c<\n", *p);
+  if (!isdigit(*p)) { 
      fprintf(stderr,"%s\n", invalidInput);
      return -1;
   }
@@ -55,13 +60,18 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
      return -1;
   }
   ++*argv; // skip opening bracket
+  while (isspace(*argv[0])) ++*argv;
+  if (!isdigit(**argv)) {
+     fprintf(stderr,"%s\n", invalidInput);
+     return -1;
+  }
   // update potential length of numarr
   if (p > *argv) len = p - *argv;
   else { // it means that the input array was like "[]"
      fprintf(stderr,"%s\n", invalidInput);
      return -1;
   }
-  //printf("parseargs: len = %d: %s\n", len, argv[0]);
+  //printf("vjn: parseargs: len = %d: %s\n", len, argv[0]);
   *numarr = (int*) malloc(sizeof(int) * len);
   if (*numarr == 0) { 
      fprintf(stderr, "Not enough memory!\n");
@@ -79,9 +89,19 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
 	 }
 	 break;
      }
+     //printf("vjn: saveptr = >%s<\n", saveptr);
+     char *t = saveptr;
+     while (isspace(*t)) ++t;
+     if (*t != '\0' && !isdigit(*t)) {
+        fprintf(stderr,"%s\n", invalidInput);
+        free(*numarr); return -1;
+     } 
      errno = 0;
      (*numarr)[j] = strtol(token,&endptr,10);
-     if (*endptr != 0) {
+     //printf("vjn: endptr = >%s<\n", endptr);
+     t = endptr;
+     while (isspace(*t)) ++t;
+     if (*t != 0) {
 	 fprintf(stderr,"%s: %s\n",invalidNumber, endptr);
          free(*numarr);
          return -1;
@@ -89,7 +109,7 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
    }
    // at this point all is well. I'll resize numarr according to tokens
    len = j, errno = 0;
-   //printf("parseargs: at this point, j = %d\n", j);
+   //printf("vjn: parseargs: at this point, j = %d\n", j);
    *numarr = (int*) reallocarray(*numarr,len,sizeof(int));
    if (*numarr == 0) {
       len = -1;
