@@ -18,7 +18,7 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
   static char *invalidTargetSum = "Invalid target sum";
   static char *invalidNumber = "Invalid number";	
   if (argc != 3) {
-     fprintf(stderr,"%s\n", invalidInput);
+     fprintf(stderr,"1)%s\n", invalidInput);
      fprintf(stderr,"%s\n", usage);
      return -1;
   }
@@ -40,7 +40,7 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
   char *p = argv[argc] + len;
   while (isspace(*--p));
   if (*p != ']') {
-     fprintf(stderr,"%s: %s\n", invalidInput, argv[argc]);
+     fprintf(stderr,"2)%s: %s\n", invalidInput, argv[argc]);
      return -1;
   }
   *p = '\0';
@@ -48,7 +48,7 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
   while (isspace(*--p));
   //printf("vjn: *p = >%c<\n", *p);
   if (!isdigit(*p)) { 
-     fprintf(stderr,"%s\n", invalidInput);
+     fprintf(stderr,"3)%s\n", invalidInput);
      return -1;
   }
   // skip blanks at beginning if any.
@@ -56,19 +56,19 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
   while (isspace(*argv[0])) ++*argv;
   // check for opening bracket
   if (**argv != '[') {
-     fprintf(stderr,"%s\n", invalidInput);
+     fprintf(stderr,"4)%s\n", invalidInput);
      return -1;
   }
   ++*argv; // skip opening bracket
   while (isspace(*argv[0])) ++*argv;
-  if (!isdigit(**argv)) {
-     fprintf(stderr,"%s\n", invalidInput);
+  if (!isdigit(**argv) && **argv != '-') {
+     fprintf(stderr,"5)%s\n", invalidInput);
      return -1;
   }
   // update potential length of numarr
   if (p > *argv) len = p - *argv;
   else { // it means that the input array was like "[]"
-     fprintf(stderr,"%s\n", invalidInput);
+     fprintf(stderr,"6)%s\n", invalidInput);
      return -1;
   }
   //printf("vjn: parseargs: len = %d: %s\n", len, argv[0]);
@@ -84,7 +84,7 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
      token = strtok_r(argv[0],",",&saveptr);
      if (token == 0) {
          if (j==0) {	// array is empty
-            fprintf(stderr,"%s\n", invalidInput);
+            fprintf(stderr,"7)%s\n", invalidInput);
             free(*numarr); return -1;
 	 }
 	 break;
@@ -92,8 +92,8 @@ int parseargs(int argc, char **argv, int **numarr, int *sum)
      //printf("vjn: saveptr = >%s<\n", saveptr);
      char *t = saveptr;
      while (isspace(*t)) ++t;
-     if (*t != '\0' && !isdigit(*t)) {
-        fprintf(stderr,"%s\n", invalidInput);
+     if (*t != '\0' && !isdigit(*t) && *t != '-') {
+        fprintf(stderr,"8)%s\n", invalidInput);
         free(*numarr); return -1;
      } 
      errno = 0;
