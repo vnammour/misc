@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"bytes"
 )
 
 const (
@@ -34,24 +35,33 @@ func main() {
 	}
 
 	soln := 0
+	// buf := bytes.NewBuffer(make([]byte,0,len(arr))) // or below
+	buf := new(bytes.Buffer)
+	buf.WriteByte('[')
 	for i := 0; i < len(arr); i++ {
 		index := sum - arr[i]
 		// note that sum - key = index. So once I am done with that entry,
 		// I can set sum - index to nil
 		if list, ok := keys[index]; ok {
-			/*for p := list.Head; p != nil; p = p.Next {
-				fmt.Printf("[%d,%d]\n", i, p.Data)
-			}*/
+			var sep string
 			for ; list != nil && list.Head != nil && i != list.Head.Data;
 				list.Head = list.Head.Next {
+					if soln == 0 {
+						sep = ""
+					} else {
+						sep = " "
+					}
 					soln++
-					fmt.Printf("[%d,%d]\n", i, list.Head.Data)
+					buf.WriteString(fmt.Sprintf("%s[%d %d]",sep,i,list.Head.Data))
 			}
 			keys[sum - index] = nil
 		}
 	}
 	if soln == 0 {
 		fmt.Printf("No pairs found.\n")
+	} else {
+		buf.WriteByte(']')
+		fmt.Printf("%s\n", buf)
 	}
 }
 
