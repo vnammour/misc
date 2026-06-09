@@ -1,39 +1,27 @@
-/* Fri Jun  5 05:31:40 PM IDT 2026 */
+/* Tue Jun  9 04:47:43 PM IDT 2026 */
 /* By: vnammour */
 package main
-
 import (
 	"fmt"
 )
-
 func main() {
-	arr := make([]string,5)
-	arr[0] = "a"
-	arr[2] = "b"
-	arr[4] = "c"
-	fmt.Printf("%#v\n", arr)
-	compact_ptr(&arr)
-	fmt.Printf("%#v\n", arr)
+	slice := []string{"zero","","two","three","","five",""}
+	count := compact(&slice)
+	fmt.Printf("%q\n", slice)
+	fmt.Printf("%d\n", count)
 }
 
-func compact(ptr []string) []string {
-	i := 0
-	for _,str := range ptr {
-		if len(str) != 0 {
-			ptr[i] = str
-			i++
+func compact(s *[]string) int {
+	count := 0
+	j := 0
+	for i := 0; i < len(*s); i++ {
+		if len((*s)[i]) != 0 {
+			(*s)[j] = (*s)[i]
+			j++
+		} else {
+			count++
 		}
 	}
-	return ptr[:i]
-}
-
-func compact_ptr(ptr *[]string) {
-	i := 0
-	for _,str := range *ptr {
-		if len(str) != 0 {
-			(*ptr)[i] = str
-			i++
-		}
-	}
-	*ptr = (*ptr)[:i]
+	*s = (*s)[:j]
+	return count
 }

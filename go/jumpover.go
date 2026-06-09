@@ -1,4 +1,4 @@
-/* Fri Jun  5 05:49:57 PM IDT 2026 */
+/* Tue Jun  9 05:24:15 PM IDT 2026 */
 /* By: vnammour */
 package main
 
@@ -7,19 +7,19 @@ import (
 )
 
 func main() {
-	fmt.Print(jumpover("1010101010"))
-	fmt.Print(jumpover(""))
-	fmt.Print(jumpover("t w e l v e"))
-	fmt.Print(jumpover("12"))
+	fmt.Print(JumpOver("1010101010"))
+	fmt.Print(JumpOver(""))
+	fmt.Print(JumpOver("t w e l v e"))
+	fmt.Print(JumpOver("12"))
 }
 
-func jumpover(s string) string {
-	j := 0
-	buf := make([]byte,len(s)/3 + 1)
-	for i := 2; i < len(s); i,j = i + 3, j+1 {
-		buf[j] = s[i]
+func JumpOver(s string) string {
+	buf := make([]rune,0,len(s))
+	for i,r := range s {
+		if (i+1)%3 == 0 {
+			buf = append(buf,r)
+		}
 	}
-	buf[j] = '\n'
-	j++
-	return string(buf[:j])
+	buf = append(buf,'\n')
+	return string(buf)
 }
