@@ -14,16 +14,31 @@ const long long minlong = ~maxlong;
 typedef unsigned char byte;
 
 void setkthbit(int n, int k);
-int extract_a_bit_field(int x, int shift);
+void clearkthbit(int n, int k);
+void togglekthbit(int n, int k);
+int extract_a_bit_field(int x, int mask, int shift);
 
 int main(int argc, char *argv[])
 {
     int x = 0xbd6d;
     int shift = 7;
-    int y = extract_a_bit_field(x,shift);
+    int mask = 0xf << shift;
+    int y = extract_a_bit_field(x,mask, shift);
     printf("y = %#b\n", y);
-    setkthbit(x,4);
+    printf("x = \n");
     printf("%#b\n", x);
+    setkthbit(x,4);
+    clearkthbit(x,4);
+    togglekthbit(x,4);
+    {
+        // problem: set a bit field in a word x to a value y.
+        // idea: invert mask to clear, and OR the shifted value.
+        // x = (x & ~mask) | (y << shift);
+        // example:
+        y = 0x3;
+        x = (x & ~mask) | (y <<shift);
+        printf("%#b\n", x);
+    }
 }
 
 void setkthbit(int n, int k) {
@@ -31,8 +46,17 @@ void setkthbit(int n, int k) {
     printf("%#b\n",n);
 }
 
-int extract_a_bit_field(int x, int shift) {
-    int mask = 0xf << shift;
+void clearkthbit(int n, int k) {
+    n = n & ~(1<<k);
+    printf("%#b\n", n);
+}
+
+void togglekthbit(int n, int k) {
+    n = n ^ (1 << k);
+    printf("%#b\n", n);
+}
+
+int extract_a_bit_field(int x, int mask, int shift) {
     printf("x = %#b\n", x);
     int y = (x & mask) >> shift;
     printf("y = %#b\n", y);

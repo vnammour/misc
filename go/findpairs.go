@@ -3,15 +3,15 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
-	"bytes"
 )
 
 const (
 	intsize = 32 << (^uint(0) >> 63)
-	maxint = 1 << (intsize-1) - 1
-	minint = -1 << (intsize -1)
+	maxint  = 1<<(intsize-1) - 1
+	minint  = -1 << (intsize - 1)
 )
 
 func main() {
@@ -24,37 +24,37 @@ func main() {
 	}
 	sum, ok := atoi(os.Args[2])
 	if !ok {
-		fmt.Fprintf(os.Stderr,"Invalid target sum.\n")
+		fmt.Fprintf(os.Stderr, "Invalid target sum.\n")
 		os.Exit(1)
 	}
 	fmt.Printf("%v\n", arr)
 	fmt.Println(sum)
 	keys := make(map[int]*List)
 	for i := 0; i < len(arr); i++ {
-		keys[arr[i]] = addnode(keys[arr[i]],i)
+		keys[arr[i]] = addnode(keys[arr[i]], i)
 	}
 
 	soln := 0
 	// buf := bytes.NewBuffer(make([]byte,0,len(arr))) // or below
 	buf := new(bytes.Buffer)
 	buf.WriteByte('[')
+	var sep string
 	for i := 0; i < len(arr); i++ {
 		index := sum - arr[i]
 		// note that sum - key = index. So once I am done with that entry,
 		// I can set sum - index to nil
 		if list, ok := keys[index]; ok {
-			var sep string
-			for ; list != nil && list.Head != nil && i != list.Head.Data;
-				list.Head = list.Head.Next {
-					if soln == 0 {
-						sep = ""
-					} else {
-						sep = " "
-					}
-					soln++
-					buf.WriteString(fmt.Sprintf("%s[%d %d]",sep,i,list.Head.Data))
+			for list != nil && list.Head != nil && i != list.Head.Data {
+				if soln == 0 {
+					sep = ""
+				} else {
+					sep = " "
+				}
+				soln++
+				buf.WriteString(fmt.Sprintf("%s[%d %d]", sep, i, list.Head.Data))
+				list.Head, list.Head.Next = list.Head.Next, nil
 			}
-			keys[sum - index] = nil
+			keys[sum-index] = nil
 		}
 	}
 	if soln == 0 {
@@ -65,24 +65,24 @@ func main() {
 	}
 }
 
-func parsearray(s string) ([]int,bool) {
-	i := index(s,"[")
-	j := index(s,"]")
+func parsearray(s string) ([]int, bool) {
+	i := index(s, "[")
+	j := index(s, "]")
 	if i == -1 || j == -1 {
 		fmt.Fprintf(os.Stderr, "Invalid input.\n")
-		return nil,false
+		return nil, false
 	}
-	s = s[i+1:j]
+	s = s[i+1 : j]
 	arr := make([]int, len(s))
 	j = 0
 	for {
-		i = index(s,",")
+		i = index(s, ",")
 		if i == -1 {
 			i = len(s)
 		}
 		num, ok := atoi(s[:i])
 		if !ok {
-			return arr,false
+			return arr, false
 		}
 		// fmt.Printf("j = %d, num = %d\n", j, num)
 		arr[j] = num
@@ -93,7 +93,7 @@ func parsearray(s string) ([]int,bool) {
 			break
 		}
 	}
-	return arr[:j],true
+	return arr[:j], true
 }
 
 func hasprefix(s, sub string) bool {
@@ -109,9 +109,10 @@ func index(s, sub string) int {
 	return -1
 }
 
-func atoi(s string) (int,bool) {
+func atoi(s string) (int, bool) {
 	i := 0
-	for ; i < len(s) && isspace(s[i]); i++ {}
+	for ; i < len(s) && isspace(s[i]); i++ {
+	}
 	s = s[i:]
 	if len(s) == 0 {
 		return 0, false
@@ -129,7 +130,7 @@ func atoi(s string) (int,bool) {
 	if sign < 0 {
 		m++
 	}
-	for i:=0; i < len(s); i++ {
+	for i := 0; i < len(s); i++ {
 		if !isdigit(s[i]) {
 			fmt.Fprintf(os.Stderr, "Invalid number: %c\n", s[i])
 			return 0, false
@@ -139,7 +140,7 @@ func atoi(s string) (int,bool) {
 			return 0, false
 		}
 		num *= base
-		if num > m - d {
+		if num > m-d {
 			return 0, false
 		}
 		num += d
@@ -174,12 +175,13 @@ type List struct {
 }
 
 func addnode(list *List, data int) *List {
-	node := new(Node{data,nil})
+	node := new(Node{data, nil})
 	if list == nil || list.Head == nil {
-		return &List{Head: &Node{data,nil}}
+		return &List{Head: &Node{data, nil}}
 	}
 	p := list.Head
-	for ; p.Next != nil; p = p.Next {}
+	for ; p.Next != nil; p = p.Next {
+	}
 	p.Next = node
 	return list
 }
