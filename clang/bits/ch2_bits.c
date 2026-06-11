@@ -4,6 +4,7 @@
 unsigned getbits(unsigned x, int p, int n);
 unsigned setbits(unsigned x, int p, int n, unsigned y);
 unsigned invert(unsigned x, int p, int n);
+unsigned rightrot(unsigned x, int n);
 int main(int argc, char *argv[])
 {
     // int x = 0xb5;
@@ -33,6 +34,12 @@ int main(int argc, char *argv[])
 	    printf("z = %#0*b\n", size, invert(x,11,9));
         printf("\n");
     }
+    // rightrot
+    {
+        // 101000011111 -> f(x,3) -> 111101000011 // f83
+        int x = 0xa1f;
+        printf("%#0b\n", rightrot(x,3));
+    }
 }
 unsigned getbits(unsigned x, int p, int n) {
     return (x >> (p - n + 1)) & ~(~0 << n);
@@ -52,4 +59,14 @@ unsigned setbits(unsigned x, int p, int n, unsigned y) {
 unsigned invert(unsigned x, int p, int n) {
     // (~(~0 << n))<<(p-n+1); // 1111111000000000 -> 0000000111111111 -> 000111111111000
     return x ^ (~(~0 << n))<<(p-n+1);
+}
+
+unsigned rightrot(unsigned x, int n) {
+    // 101000011111 -> f(x,3) -> 111101000011
+    unsigned len = sizeof(x) * 8;
+    int a = x & ~(~0<<n);
+    x >>= n;
+    a <<= (len-n);
+    x |= a;
+    return x;
 }

@@ -11,17 +11,14 @@ func main() {
 	fmt.Printf("%d\n", count)
 }
 
-func compact(s *[]string) int {
-	count := 0
-	j := 0
-	for i := 0; i < len(*s); i++ {
-		if len((*s)[i]) != 0 {
-			(*s)[j] = (*s)[i]
-			j++
-		} else {
-			count++
-		}
-	}
-	*s = (*s)[:j]
-	return count
-}
+func compact(ptr *[]string) int {
+     k := 0
+     for _, elem := range *ptr {
+         if len(elem) != 0 {
+             (*ptr)[k] = elem
+             k++
+         }
+     }
+     *ptr = (*ptr)[:k]
+     return len(*ptr)
+ }
