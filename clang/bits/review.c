@@ -6,6 +6,8 @@ unsigned setbits(unsigned x, int p, int n, unsigned y);
 unsigned invert(unsigned x, int p, int n);
 unsigned rightrot(unsigned x, int n);
 int wordlength(); 
+int bitcount(unsigned);
+int bitcount2(unsigned);
 int main(int argc, char *argv[])
 {
     int size = sizeof(unsigned int) * 8;
@@ -38,6 +40,12 @@ int main(int argc, char *argv[])
         int x = 0x88888887;
         printf("x = 0b%0*b\n", width,x);
         printf("x = 0b%0*b\n", width,rightrot(x,3));
+    }
+    // bitcount
+    {
+        int x = 0x88;
+        printf("%d\n", bitcount(x));
+        printf("%d\n", bitcount2(x));
     }
 }
 
@@ -74,4 +82,22 @@ int wordlength() {
     unsigned v = (unsigned) ~0;
     for (i = 1; (v = v >> 1) > 0; i++);
     return i;
+}
+
+// Section 2.10, bitcount: Declaring the argument x to be unsigned ensures that when it is
+// right-shifted, vacated bits will be filled with zeros, not sign bits, regardless of the
+// machine the program is run on.
+int bitcount(unsigned x) {
+    int b;
+    for (b = 0; x != 0; x >>= 1)
+        if (x & 01) b++;
+    return b;
+}
+
+// Ex 2-9
+int bitcount2(unsigned x) {
+    int b;
+    for (b = 0; x != 0; x &= x-1)
+        b++;
+    return b;
 }

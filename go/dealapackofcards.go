@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 func main() {
-	cards := []int{0,1,2,3,4,5,6,7,8,9,10,11}
+	cards := []int{1,2,3,4,5,6,7,8,9,10,11,12}
 	dealapackofcards(cards)
 }
 
@@ -15,12 +15,12 @@ func dealapackofcards(cards []int) {
 	for i := 0; i < len(cards); i++ {
 		if i % divisor == 0 {
 			player++
-			fmt.Printf("Player %d: %d, ", player, i+1)
+			fmt.Printf("Player %d: %d, ", player, cards[i])
 		} else {
 			if (i + 1) % divisor == 0 {
-				fmt.Printf("%d\n", i+1)
+				fmt.Printf("%d\n", cards[i])
 			} else {
-				fmt.Printf("%d, ", i + 1)
+				fmt.Printf("%d, ", cards[i])
 			}
 		}
 	}
