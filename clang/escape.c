@@ -7,28 +7,46 @@
  real characters.
 */
 #include <stdio.h>
+#include <stdlib.h>
 void escape(char *s, char *t);
+int countwhites(char *p, int *len);
 int main(int argc, char *argv[])
 {
+    char *s = "one\ttwo\vthree\nfour\rand";
+    printf("%s\n", s);
+    // return 0;
+    int len = 0;
+    int nwhite = countwhites(s,&len);
+    printf("nwhite = %d, len = %d\n", nwhite,len);
+    len = len+nwhite+1;
+    char *t = (char*) malloc(len);
+    escape(s,t);
+    printf("%s", t);
 }
-void inputcount() {
-    int c, i, nwhite, nother, ndigit[10];
-    nwhite = nother = 0;
-    for (i = 0; i < 10; i++) ndigit[i] = 0;
-    while ((c = getchar()) != EOF) {
-        switch(c) {
-        case '0': case '1': case '2': case '3': case '4':
-        case '5': case '6': case '7': case '8': case '9':
-            ndigit[c-'0']++;
-            break;
-        case ' ': case '\t': case '\n': nwhite++; break;
-        default: nother++; break;
+int countwhites(char *p, int *len) {
+    char c = '\0';
+    int nwhite = 0;
+    char *q = p;
+    while ((c = *q++) != '\0') {
+        if (c == ' ' || c == '\t' || c == '\v' || c == '\n'
+                || c == '\r')
+            nwhite++;
+    }
+    *len = --q - p;
+    return nwhite;
+}
+
+void escape(char *s, char *t) {
+    char c;
+    char *q = t;
+    while ((c = *s++) != '\0') {
+        switch (c) {
+        case '\t': *t++ = '\\'; *t++ = 't'; break;
+        case '\n': *t++ = '\\'; *t++ = 'n'; break;
+        case '\v': *t++ = '\\'; *t++ = 'v'; break;
+        case '\r': *t++ = '\\'; *t++ = 'r'; break;
+        default: *t++ = c; break;
         }
     }
-    printf("digits = ");
-    for (i = 0; i < 10; i++) printf(" %d", ndigit[i]);
-    printf(", white space = %d, other = %d\n", nwhite, nother);
-}
-void escape(char *s, char *t) {
-
+    *t = c;
 }
