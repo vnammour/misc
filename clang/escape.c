@@ -13,15 +13,15 @@ int countwhites(char *p, int *len);
 int main(int argc, char *argv[])
 {
     char *s = "one\ttwo\vthree\nfour\rand";
-    printf("%s\n", s);
-    // return 0;
     int len = 0;
     int nwhite = countwhites(s,&len);
-    printf("nwhite = %d, len = %d\n", nwhite,len);
+    // printf("nwhite = %d, len = %d\n", nwhite,len);
     len = len+nwhite+1;
     char *t = (char*) malloc(len);
     escape(s,t);
     printf("%s", t);
+    free(t);
+    return 0;
 }
 int countwhites(char *p, int *len) {
     char c = '\0';
