@@ -1,6 +1,7 @@
-/* Tue Jun 30 03:08:48 PM IDT 2026 */
-/* By: vnammour */
+/* Thu Jul  2 12:42:49 PM IDT 2026 */
+/* By: Jamil Nammour */
 package main
+
 import (
 	"fmt"
 )
@@ -18,12 +19,42 @@ func main() {
 	}
 	// BTreeApplyInorder(root,fmt.Println)
 	inordertraversal(root,fmt.Println)
+	fmt.Println("#of levels = ",BTreeLevelCount(root))
 }
+
+func BTreeIsBinary(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	left := root.Left == nil || root.Left.Data < root.Data
+	right := root.Right == nil || root.Right.Data > root.Data
+	if left && right {
+		return BTreeIsBinary(root.Left) && BTreeIsBinary(root.Right)
+	} else {
+		return false
+	}
+}
+
 func BTreeApplyInorder(root *TreeNode, f func(...interface{}) (int, error)) {
 	if root != nil {
 		BTreeApplyInorder(root.Left, f)
 		fmt.Printf("%v\n", root.Data)
 		BTreeApplyInorder(root.Right, f)
+	}
+}
+
+// check if it can be done iteratively
+func BTreeLevelCount(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	count := 1
+	l := BTreeLevelCount(root.Left)
+	r := BTreeLevelCount(root.Right)
+	if (l >= r) {
+		return count + l
+	} else {
+		return count + r
 	}
 }
 

@@ -1,6 +1,7 @@
-/* Tue Jun 30 03:08:48 PM IDT 2026 */
-/* By: vnammour */
+/* Thu Jul  2 10:21:28 AM IDT 2026 */
+/* By: Jamil Nammour */
 package main
+
 import (
 	"fmt"
 )
@@ -18,12 +19,29 @@ func main() {
 	}
 	// BTreeApplyInorder(root,fmt.Println)
 	inordertraversal(root,fmt.Println)
+	fmt.Println("#of levels = ",BTreeLevelCount(root))
 }
+
 func BTreeApplyInorder(root *TreeNode, f func(...interface{}) (int, error)) {
 	if root != nil {
 		BTreeApplyInorder(root.Left, f)
 		fmt.Printf("%v\n", root.Data)
 		BTreeApplyInorder(root.Right, f)
+	}
+}
+
+// check if it can be done iteratively
+func BTreeLevelCount(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	count := 1
+	l := BTreeLevelCount(root.Left)
+	r := BTreeLevelCount(root.Right)
+	if (l >= r) {
+		return count + l
+	} else {
+		return count + r
 	}
 }
 
