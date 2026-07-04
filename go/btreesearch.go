@@ -1,5 +1,5 @@
-/* Thu Jul  2 12:42:49 PM IDT 2026 */
-/* By: Jamil Nammour */
+/* Fri Jul  3 01:06:39 PM IDT 2026 */
+/* By: vnammour */
 package main
 
 import (
@@ -21,6 +21,30 @@ func main() {
 	// inordertraversal(root,fmt.Println)
 	fmt.Println("#of levels = ",BTreeLevelCount(root))
 	fmt.Println("isbinary = ", BTreeIsBinary(root))
+	fmt.Println(BTreeSearch(root,"5"))
+	fmt.Println(BTreeSearch_rec(root,"5"))
+}
+
+func BTreeSearch(root *TreeNode, data string) *TreeNode {
+	for root != nil && root.Data != data {
+		if root.Data < data {
+			root = root.Left
+		} else {
+			root = root.Right
+		}
+	}
+	return root
+}
+
+func BTreeSearch_rec(root *TreeNode, data string) *TreeNode {
+	if root != nil && root.Data != data {
+		if root.Data < data {
+			BTreeSearch_rec(root.Left, data)
+		} else if root.Data > data {
+			BTreeSearch_rec(root.Right, data)
+		}
+	}
+	return root
 }
 
 func BTreeIsBinary(root *TreeNode) bool {
