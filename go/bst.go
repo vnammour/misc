@@ -12,8 +12,8 @@ type TreeNode struct {
 }
 
 func main() {
-	// data := []int{5,4,7,8,2,1, 5, 6, 9, 10}
-	data := []int{4,1,7,5}
+	data := []int{5,4,7,8,2,1,5,6}
+	// data := []int{4,1,7,5}
 	var root *TreeNode
 	for _,val := range data {
 		root = Insert(root,val)
@@ -21,23 +21,13 @@ func main() {
 	// InOrderTraversal(root)
 	inordertraversal(root)
 	fmt.Println("depth = ",Depth(root))
+	fmt.Println("depth = ", depth(root))
 
-	node := search(root,1)
+	node := Search(root,1)
 	rplc := &TreeNode{Data: 3}
 	fmt.Println(node,rplc)
 	root = transplant(root, node, rplc)
 	inordertraversal(root)
-}
-
-func search(root *TreeNode, data int) *TreeNode {
-	for root != nil && root.Data != data {
-		if data < root.Data {
-			root = root.Left
-		} else {
-			root = root.Right
-		}
-	}
-	return root
 }
 
 func TreeSuccessor(root *TreeNode) *TreeNode {
@@ -81,19 +71,6 @@ func Search(root *TreeNode, data int) *TreeNode {
 		}
 	}
 	return root
-}
-
-func Depth(root *TreeNode) int {
-	if root == nil {
-		return 0
-	}
-	l := 1 + Depth(root.Left)
-	r := 1 + Depth(root.Right)
-	if l > r {
-		return l
-	} else {
-		return r
-	}
 }
 
 func Insert(root *TreeNode, data int) *TreeNode {
@@ -184,4 +161,40 @@ func transplant(root, node, rplc *TreeNode) *TreeNode {
 		y.Right = rplc
 	}
 	return root
+}
+
+func Depth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	l := 1 + Depth(root.Left)
+	r := 1 + Depth(root.Right)
+	if l > r {
+		return l
+	} else {
+		return r
+	}
+}
+
+func depth(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	queue := append(make([]*TreeNode,0,10),root)
+	count := 1
+	bfs_depth(queue,&count)
+	return count
+}
+
+func bfs_depth(queue []*TreeNode,count *int) {
+	if len(queue) > 0 {
+		node := queue[0]
+		queue = queue[1:]
+		if node != nil {
+			queue = append(queue,node.Left,node.Right)
+			*count++
+			fmt.Println(node.Data,"->",*count)
+		}
+		bfs_depth(queue,count)
+	}
 }
