@@ -1,0 +1,34 @@
+cool = classroom object oriented language
+* A complete compiler
+- Cool -> MIPS assembly language
+* In 5 programing assignments:
+- Write a Cool program
+- Lexical analysis
+- Parsing
+- Semantic analysis
+- Code generation
+All 4 phases are plug compatible
+Suggestions for optimizations will be given as optional.
+COOL programs end in extension .cl
+
+Structure of a cool program:
+class Main {
+    main():Int { 1 };
+}; // notice that it ends in semicolon
+
+cool is an expression language.
+We need to put the return type of the function, so in this case we placed Int
+
+Installing spim:
+yay -S spim-svn
+Do you need sudo?
+No, do not type sudo yay.
+yay handles it automatically: Run the command as a normal user.
+Security risk: yay explicitly blocks you from running it with sudo because building packages from the AUR as root is dangerous.
+Elevated prompt: yay will automatically prompt you for your sudo password at the very end of the process when it is ready to install the built package.
+File Locations
+Once installed, the package places files in these standard system directories:
+Binary Executable: /usr/bin/spim
+Architecture Files: /usr/lib/spim/ (contains the standard trap handler)
+Documentation: /usr/share/doc/spim/
+Man Pages: /usr/share/man/man1/spim.1.gzYou can verify the exact installation path on your system by running which spim.
