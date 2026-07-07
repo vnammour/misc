@@ -193,7 +193,13 @@ func bfs_depth(queue []*TreeNode,count *int) {
 		if node != nil {
 			queue = append(queue,node.Left,node.Right)
 			*count++
-			fmt.Println(node.Data,"->",*count)
+			if node.Left != nil {
+				fmt.Printf("enqueuing %d\n", node.Left.Data)
+			}
+			if node.Right != nil {
+				fmt.Printf("enqueuing %d\n", node.Right.Data)
+			}
+			fmt.Printf("count = %d\n", *count)
 		}
 		bfs_depth(queue,count)
 	}
