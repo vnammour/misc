@@ -5,33 +5,35 @@
 #include <stddef.h>
 #include <string.h>
 #define null NULL 
-char *itoa(int num);
 const unsigned intsize = 32 << (~((unsigned)0) >> 63);
 const int maxint = ((unsigned)1 << (intsize-1)) - 1;
 const int minint = -1 << (intsize-1);
+char *itoa(int num, char *s, int width);
+#define i2a(int) itoa(int,0,0)
+int numdecimals(int n);
 int main(int argc, char *argv[])
 {
-    /*printf("%d\n", maxint);
-    printf("%d\n", minint);
-    unsigned m = maxint;
-    size_t count = 1;
-    while (m/=10) {
-        // m/=10;
-        printf("m = %d\n", m);
-        ++count;
-    }
-    printf("count = %d\n", count);*/
-    char *s = itoa(minint);
+    char *s = i2a(minint);
     printf("%s\n", s);
     free(s);
-    s = itoa(maxint);
+    s = itoa(maxint,0,3);
     printf("%s\n", s);
     free(s);
+    printf("decimals: %d\n", numdecimals(-123));
 }
 
-char *itoa(int num) {
-    int sz = 12;
-    char *buf = (char*) malloc(sizeof(char)* sz);
+int numdecimals(int n) {
+    int num = 1;
+    for (; (n/=10)!=0; num++);
+    return num;
+}
+
+
+char *itoa(int num, char *buf, int width) {
+    int sz = 12 + width;
+    if (buf == null) {
+        buf = (char*) malloc(sizeof(char)* sz);
+    }
     char *p = buf + sz - 1;
     *p-- = '\0';
     int sign = num < 0 ? -1 : 1;
@@ -42,6 +44,7 @@ char *itoa(int num) {
     }
     ++p;
     if (sign == -1) *--p = '-';
+    for (; width > 0; --width) *--p = ' ';
     char *temp = (char*) malloc(sizeof(char) * (buf + sz - p));
     if (temp == null) {
         return buf;

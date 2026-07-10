@@ -3,10 +3,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> // strdup
+
 typedef struct {
     char *data;
     size_t count;
 } String_View;
+
 int main(int argc, char *argv[])
 {
     // char *s = "Hello, World");
