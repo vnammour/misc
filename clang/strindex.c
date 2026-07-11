@@ -8,14 +8,22 @@
 int getLine(char *s, int size);
 int strindex(char *s, char *pattern);
 void findall(int argc, char *line, char **argv);
+int rightmostindex(char *s, char *pattern);
+int rightmostindex2(char *s, char *pattern);
+void testrightmostindex(char *line, char *pattern);
 int main(int argc, char *argv[])
 {
     if (--argc == 0) return 0;
     ++argv;
     char *s = (char*) malloc(sizeof(char)*MAXLINE);
     int index = -1;
+    char **p = argv;
     while (getLine(s,MAXLINE) != EOF) {
         findall(argc,s,argv);
+        if (*p != NULL ) {
+            testrightmostindex(s,*p);
+            ++p;
+        }
     }
     /*while (getLine(s,MAXLINE) != EOF) {
         // printf(">%s<, strlen(s) = %d\n", s, strlen(s));
@@ -49,4 +57,33 @@ int strindex(char *s, char *pattern) {
         if (t > p && *q == '\0') done = 1, --p;
     }
     return done == 1 ? p - s : -1;
+}
+
+int rightmostindex(char *s, char *pattern) {
+    if (s == NULL || pattern == NULL) return -1;
+    int sl = strlen(s);
+    int pl = strlen(pattern);
+    if (pl > sl) return -1;
+    char *p = 0, *q = 0, *t = 0;
+    for (p = s + sl - pl; p >= s && *p; --p) {
+        for (q = pattern, t = p; *q && *q == *t; q++, t++);
+        if (*q == '\0' && t > p) return p - s;
+    }
+    return -1;
+}
+
+int rightmostindex2(char *s, char *pattern) {
+    int index = -1;
+    if (s == NULL || pattern == NULL) return index;
+    char *p = 0, *q = 0, *t = 0;
+    for (p = s; *p; p++) {
+        for (q = pattern, t = p; *q && *t == *q; t++, q++);
+        if (*q == 0 && t > p) index = p - s;
+    }
+    return index;
+}
+
+void testrightmostindex(char *line, char *pattern) {
+    int index1 = -1, index2 = -1;
+    printf("%d,%d\n", rightmostindex(line,pattern), rightmostindex2(line,pattern));
 }
