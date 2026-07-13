@@ -7,8 +7,7 @@ import (
 )
 
 func main() {
-	// exp := "this( [i]s a [test] {to check} expressin)"
-	exp := `"one'two"three"`
+	exp := "this( [i]s a [test] {to check} expressin)"
 	valid := validate_expression(exp)
 	fmt.Println(valid)
 	exp = `this "is a test'to check'quotes". end`
