@@ -44,6 +44,22 @@ Queue *new(size_t cap) {
     return q;
 }
 
+void *resize(Queue *q, size_t cap) {
+    if (cap < q->cap) {
+        return q;
+    }
+    ptrdiff_t hd = q->h - q->buf;
+    ptrdiff_t ht = q->t - q->buf;
+    int *temp = (int*) reallocarray(q->buf,cap,sizeof(int));
+    if (temp == NULL) {
+        err = 3;
+        return q;
+    }
+    q->buf = temp;
+    q->h = q->buf + hd;
+    q->t = q->buf + ht;
+}
+
 char * errstring(int err) {
     if (err < 0) {
         return "Unknown error.";
@@ -100,12 +116,14 @@ int main(int argc, char *argv[]) {
     printf("main: err = %d\n", err);
     // Queue q = init(3); // & use (&q)
     Queue *q = new(5);
-    for (int i = 0; i < capacity(q); i++) {
+    for (int i = 0; i < capacity(q)-1; i++) {
         enqueue(q,i);
         if (err != 0) printf("enqueue: %s - err = %d\n", errstring(err), err);
     }
-    printf("length = %d\n", length(q));
+    printf("cap = %ld, length = %d, remaining space = %ld\n",
+            capacity(q), length(q), capacity(q) - length(q));
     int temp;
+    resize(q,q->cap * 2);
     for (int i = 0; i < capacity(q); i++) {
         temp = dequeue(q);
         if (err != 0) printf("dequeue: %s - err = %d\n", errstring(err), err);
