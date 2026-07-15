@@ -1,16 +1,15 @@
 /* Tue Jul 14 12:57:24 PM IDT 2026 */
 /* By: vnammour */
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct {
-  int *buf, *h, *t;
-  size_t cap;
-} Queue;
+#include "queue.h"
 
 unsigned short err = 0; // 1 - overflow, 2 - underflow, 3 - no memory, 4 - other
+
+int geterr() {
+    return err;
+}
 
 Queue init(size_t cap) {
   err = 0;
@@ -115,24 +114,4 @@ int length(Queue *q) {
 
 size_t capacity(Queue *q) {
     return q->cap - 1;
-}
-
-int main(int argc, char *argv[]) {
-    // err = 0;
-    printf("main: err = %d\n", err);
-    // Queue q = init(3); // & use (&q)
-    Queue *q = new(5);
-    for (int i = 0; i < capacity(q)-1; i++) {
-        enqueue(q,i);
-        if (err != 0) printf("enqueue: %s - err = %d\n", errstring(err), err);
-    }
-    printf("cap = %ld, length = %d, remaining space = %ld\n",
-            capacity(q), length(q), capacity(q) - length(q));
-    int temp;
-    resize(q,q->cap * 2);
-    for (int i = 0; i < capacity(q); i++) {
-        temp = dequeue(q);
-        if (err != 0) printf("dequeue: %s - err = %d\n", errstring(err), err);
-        else printf("%d\n", temp);
-    }
 }
