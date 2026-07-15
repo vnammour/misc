@@ -44,23 +44,29 @@ Queue *new(size_t cap) {
     return q;
 }
 
-void *resize(Queue *q, size_t cap) {
-    if (cap < q->cap) {
-        return q;
+void resize(Queue *q, size_t cap) {
+    if (q == NULL || cap == q->cap) {
+        return;
+    }
+    if (cap <= 0) {
+        free(q->buf);
+        q->buf = q->h = q->t = NULL;
+        q->cap = 0;
+        return;
     }
     ptrdiff_t hd = q->h - q->buf;
     ptrdiff_t ht = q->t - q->buf;
     int *temp = (int*) reallocarray(q->buf,cap,sizeof(int));
     if (temp == NULL) {
         err = 3;
-        return q;
+        return;
     }
     q->buf = temp;
     q->h = q->buf + hd;
     q->t = q->buf + ht;
 }
 
-char * errstring(int err) {
+char *errstring(int err) {
     if (err < 0) {
         return "Unknown error.";
     }
