@@ -5,6 +5,7 @@
 void squeeze(char *s, char c);
 int getLine(char*,ptrdiff_t);
 void strCat(char*,char*);
+size_t strLen(char *s);
 int main(int argc, char *argv[])
 {
     char s[50] = "abcdaaabbba";
@@ -20,8 +21,16 @@ int main(int argc, char *argv[])
         char t[10] = " two";
         strCat(s,t);
         printf("%s\n", s);
+        printf("%zu\n", strLen(s));
     }
 }
+
+size_t strLen(char *s) {
+    char *p = s;
+    while (*s++);
+    return s - p - 1;
+}
+
 void squeeze(char *s, char c) {
     if (s == 0) return;
     int j = 0;
