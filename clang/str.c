@@ -6,6 +6,8 @@ void squeeze(char *s, char c);
 int getLine(char*,ptrdiff_t);
 void strCat(char*,char*);
 size_t strLen(char *s);
+int strcmp(char *s, char*t);
+int strend(char *s, char *t);
 int main(int argc, char *argv[])
 {
     char s[50] = "abcdaaabbba";
@@ -23,6 +25,18 @@ int main(int argc, char *argv[])
         printf("%s\n", s);
         printf("%zu\n", strLen(s));
     }
+    {
+        char *s = "12abcd";
+        char *t = "abc";
+        printf("strcmp(s,t) = %d\n", strcmp(s,t));
+    }
+}
+
+int strcmp(char *s, char*t) {
+    for (; *s && *t; s++, t++) {
+        if (*s == 0) return 0;
+    }
+    return *s - *t;
 }
 
 size_t strLen(char *s) {
