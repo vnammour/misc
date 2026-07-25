@@ -9,7 +9,7 @@
  func hasprefix(s,t string) bool {
     return len(s) >= len(t) && s[:len(t)] == t
  }
- func haspostfix(s, t string) bool {
+ func hassuffix(s, t string) bool {
     return len(s) >= len(t) && s[len(s)-len(t):] == t
  }
  func contains(s, t string) bool {
@@ -31,7 +31,7 @@ int hasprefix(const char *s, const char *t) {
 }
 
 // aka strend
-int haspostfix(const char *s, const char *t) {
+int hassuffix(const char *s, const char *t) {
     // return hasprefix(s+strlen(s)-strlen(t),t);
     int slen = strlen(s), tlen = strlen(t);
     if (slen < tlen) return 0;
@@ -65,6 +65,46 @@ bool gocontains(const char *s, const char *t) {
     return contains(s,t,(int*)malloc((strlen(s)/(strlen(t)+1) + 1) * sizeof(int))) > 0;
 }
 
+int compare(const char *s, const char *t) {
+    for (; *s == *t; ++s, ++t)
+        if (*s == 0) break;
+    return *s - *t;
+}
+
+int ncompare(const char *s, const char *t, int n) {
+    for (; --n >= 0 && *s == *t; ++s, ++t)
+        if (n == 0) return 0;
+        else if (*s == 0) break;
+    return *s - *t;
+}
+
+char *copy(char *s, const char *t) {
+    char *p = s;
+    while(*p++ = *t++);
+    return s;
+}
+
+char *ncopy(char *s, const char *t, int n) {
+    char *p = s;
+    while (--n >= 0 && (*p++ = *t++));
+    return s;
+}
+
+char *cat(char *s, const char *t) {
+    char *p = s;
+    while(*p) ++p;
+    while (*p++ = *t++);
+    return s;
+}
+
+char *ncat(char *s, const char *t, int n) {
+    char *p = s;
+    while (*p) ++p;
+    while (--n >= 0 && (*p++ = *t++));
+    *p = '\0';
+    return s;
+}
+
 void test_contains() {
     char *s = "abc defg hidej";
     char *t = "de";
@@ -84,14 +124,20 @@ int main(int argc, char *argv[])
     int x = hasprefix(s,t);
     printf("x = %d\n", x);
     t = "fg";
-    x = haspostfix(s,t);
+    x = hassuffix(s,t);
     printf("x = %d\n", x);
     s = t = "";
-    x = haspostfix(s,t);
+    x = hassuffix(s,t);
     printf("x = %d\n", x);
     x = hasprefix(s,t);
     printf("x = %d\n", x);
     test_contains();
+    s = "abc";
+    t = "abcde";
+    printf("strcmp = %d\n", strcmp(s,t));
+    printf("compare = %d\n", compare(s,t));
+    printf("strncmp = %d\n", strncmp(s,t,3));
+    printf("ncompare = %d\n", ncompare(s,t,3));
 }
 
 /*int contains(char *s, char *t) {
