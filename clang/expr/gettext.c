@@ -26,14 +26,59 @@ ptrdiff_t getLine(char *s, int lim) {
 int getop(char *s) {
     while (isspace(*s = getch()));
     if (*s == EOF) return *s;
-    int c = 1;
     if (isdigit(*s)) {
-        c = NUMBER;
-        while(isdigit(*s++ = getch()));
-        --s;
-    } else if (*s != EOF) ungetch(*s);
-    c = c != NUMBER ? *s : NUMBER;
-    if (*s == EOF) --s;
+        while(isdigit(*++s = getch()));
+        if (*s != EOF) ungetch(*s);
+        *s = '\0';
+        return NUMBER;
+    }
     *++s = '\0';
-    return c;
+    return s[-1];
 }
+
+int getop_line(char *line, char *s, int len) {
+    static char *p = 0;
+    if (p == 0) p = line;
+    char *t = s;
+    while (isspace(*p)) ++p;
+    if (*p == 0) {
+        p = 0;
+        return EOF;
+    }
+    if (isdigit(*p)) {
+        while (isdigit(*p) && s - t < len) *s++ = *p++;
+        *s = '\0';
+        return NUMBER;
+    }
+    *s++ = *p++;
+    *s = '\0';
+    return s[-1];
+}
+
+/*#include <string.h>
+void test_getop_line() {
+    int lim = 512;
+    char line[lim];
+    int len;
+    while ((len = getLine(line,lim)) > 0) {
+        char s[len];
+        line[strlen(line)-1] = 0; // remove newline
+        while (getop_line(line,s,len) != EOF) {
+            printf(">%s<\n", s);
+        }
+    }
+    clearerr(stdin);
+}
+
+int main(int argc, char *argv[]) {
+    test_getop_line();
+    char s[100];
+    s[0] = '\0';
+    int c;
+    while ((c = getop(s)) != EOF)
+        printf("%c, >%s<\n", c, s);
+    s[0] = '\0';
+    clearerr(stdin);
+    while (getLine(s,100) > 0)
+        printf("%s", s);
+}*/
