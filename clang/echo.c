@@ -9,6 +9,7 @@ void echo(int argc, char *argv[]) {
 
     while (--argc > 0)
         printf("%s%s", *++argv, argc > 1 ? " " : "");
+        // printf(argc > 1 ? "%s " : "%s", *++argv);
     printf("\n");
 }
 
@@ -16,7 +17,7 @@ int main(int argc, char *argv[])
 {
     echo(argc, argv);
     printf(">...<\n");
-    char nl = 1;
+    char nl = 1; // newline, enabled by default
     if (argc > 1) {
         if (strcmp(argv[1], "-n") == 0) {
             --argc, ++argv, nl = 0;
