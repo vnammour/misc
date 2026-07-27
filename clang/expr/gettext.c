@@ -45,6 +45,7 @@ int getop_line(char *line, char *s, int len) {
         p = 0;
         return EOF;
     }
+    if ((*p == '+' || *p == '-') && isdigit(p[1])) *s++ = *p++;
     if (isdigit(*p)) {
         while (isdigit(*p) && s - t < len) *s++ = *p++;
         *s = '\0';

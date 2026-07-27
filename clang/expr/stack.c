@@ -6,9 +6,13 @@ static int *p = buf;
 
 int pop() {
     if (p > buf) return *--p;
-    else return '?';
+    else return 0;
 }
 
 void push(int x) {
     if (p < buf + LEN) *p++ = x;
+}
+
+int isempty() {
+    return p == buf;
 }
