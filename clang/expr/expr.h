@@ -7,6 +7,7 @@
 int pop();
 void push(int);
 int isempty();
+// void printstack();
 int a2i(char *s, int *ok);
 int getch();
 void ungetch(int c);

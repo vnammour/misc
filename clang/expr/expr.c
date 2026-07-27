@@ -8,7 +8,9 @@ int main(int argc, char *argv[])
     char line[MAXLINE];
     int len;
     int c, ok, num;
-    while ((len = getLine(line,MAXLINE)) > 0) {
+    int quit = 0;
+start:
+    while (!quit && (len = getLine(line,MAXLINE)) > 0) {
         if (line[len-1] == '\n')
             line[len-1] = '\0'; // remove newline
         char s[len];
@@ -19,23 +21,22 @@ int main(int argc, char *argv[])
                if (ok) push(num);
                else printf("invalid number format\n");
            } else {
-               int a;
                switch(s[0]) {
                 case '*': push(pop()*pop()); break;
                 case '+': push(pop()+pop()); break;
                 case '-':
-                    a = pop();
-                    int b = pop();
-                    printf("pushing %d\n", b - a);
-                    push(b-a);
+                    num = pop();
+                    push(pop()-num);
+                    break;
                 case '/':
-                    a = pop();
-                    if (a == 0) printf("error: division by zero\n");
-                    else push(pop()/a); break;
+                    num = pop();
+                    if (num == 0) printf("error: division by zero\n");
+                    else push(pop()/num); break;
                 case '%':
-                    a = pop();
-                    if (a == 0) printf("error: modulo by zero\n");
-                    else push(pop()%a); break;
+                    num = pop();
+                    if (num == 0) printf("error: modulo by zero\n");
+                    else push(pop()%num); break;
+                case 'q': quit = 1; goto start; break;
                 default: printf("illegal\n"); break;
                }
            }
