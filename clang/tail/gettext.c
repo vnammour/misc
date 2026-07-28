@@ -55,11 +55,10 @@ int main(int argc, char *argv[])
     }
     char **tail;
     n = n > 0 && n <= MAXLINES ? n : 10;
-    // printf("n = %d\n", n);
     if ((tail = readlines(lines,MAXLINES)) != 0 && tail > lines) {
-        while (--tail != lines && n-- > 1)
-            printf("%s", *tail);
-        if (n == 1 && tail >= lines) printf("%s", *tail);
+        char **p = n <= tail - lines ? tail - n : lines;
+        for (; p < tail; ++p)
+            printf("%s", *p);
     }
     return 0;
 }
