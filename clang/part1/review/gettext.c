@@ -47,6 +47,7 @@ size_t readlines(char **buffer, int lim) {
         *tail++ = p;
     }
     // printf("lim = %d, tail - buffer = %d\n", lim, tail - buffer);
+    free(line);
     return tail - buffer;
 }
 int main(int argc, char *argv[])
