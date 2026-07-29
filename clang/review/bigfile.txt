@@ -1,0 +1,80 @@
+/* Tue Jul 28 11:20:05 PM IDT 2026 */
+/* By: vnammour */
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <stddef.h>
+#include <string.h>
+#define LEN 10
+#define NUMBER 0
+#define MAXLINES 1024
+static char buf[LEN];
+static char *bufp = buf;
+int getch() {
+    return bufp > buf ? *--bufp : getchar();
+}
+void ungetch(int c) {
+    if (bufp < buf + LEN) *bufp++ = c;
+}
+size_t getLine(char *s, int lim) {
+    char *p = s;
+    while (--lim > 0 && (*s++ = getch()) != EOF && s[-1] != '\n');
+    if (s[-1] == EOF) --s;
+    *s = 0;
+    return s - p;
+}
+int getop(char *s) {
+    s[1] = 0;
+    while (isspace(*s = getch()));
+    if (!isdigit(*s) && *s != '.') return *s;
+    if (isdigit(*s)) while (isdigit(*++s = getch()));
+    if (*s == '.') while (isdigit(*++s = getch()));
+    if (*s != EOF) ungetch(*s);
+    *s = 0;
+    return NUMBER;
+}
+char *alloc(int);
+void afree(char*);
+size_t availablemem();
+size_t readlines(char **buffer, int lim) {
+    int len;
+    char **tail = buffer;
+    char *line = (char*) malloc(sizeof(char) * MAXLINES);
+    while (lim-- > 0 && (len = getLine(line,MAXLINES)) > 0) {
+        char *p = alloc(len+1);
+        if (p == 0) return 0;
+        strcpy(p,line);
+        *tail++ = p;
+    }
+    return tail - buffer;
+}
+int main(int argc, char *argv[])
+{
+    char **buffer = (char**) malloc(sizeof(char*)*MAXLINES);
+    if (buffer == NULL) return 1;
+    int len = readlines(buffer,MAXLINES);
+    for (char **p = buffer; p < buffer + len; p++) {
+        printf("%s", *p);
+        // *p = 0;
+    }
+    afree(*buffer);
+    free(buffer);
+    printf("available memory = %d\n", availablemem());
+}
+
+#define ALLOCBUF 8192
+static char allocbuf[ALLOCBUF];
+static char *allocp = allocbuf;
+char *alloc(int n) {
+    if (allocp <= allocbuf + ALLOCBUF - n) {
+        allocp += n;
+        return allocp - n;
+    } else return 0;
+}
+void afree(char *p) {
+    if (p >= allocbuf && p < allocbuf + ALLOCBUF)
+        allocp = p;
+}
+size_t availablemem() {
+    return allocbuf + ALLOCBUF - allocp;
+}

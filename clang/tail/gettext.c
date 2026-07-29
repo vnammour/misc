@@ -24,6 +24,7 @@ size_t getLine(char *s, int lim) {
 }
 char *alloc(int n);
 void afree(char *p);
+int memoryat();
 char **readlines(char **lines, int lim) {
     char **tail = lines;
     int len;
@@ -57,8 +58,11 @@ int main(int argc, char *argv[])
     n = n > 0 && n <= MAXLINES ? n : 10;
     if ((tail = readlines(lines,MAXLINES)) != 0 && tail > lines) {
         char **p = n <= tail - lines ? tail - n : lines;
-        for (; p < tail; ++p)
+        for (; p < tail; ++p) {
             printf("%s", *p);
+            *p = 0; // this nullifies from start location of *p, not necessarily beginning of lines
+        }
+        afree(*lines);
     }
     return 0;
 }
