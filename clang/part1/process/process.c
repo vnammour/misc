@@ -12,20 +12,28 @@
 #include <string.h>
 #include <stddef.h>
 #include "process.h"
-#define MAXLINE 512
-#define NLINES 1024
+#define MAXLINE 100
+#define NLINES 100
 
-void quicksort(char *v[], int left, int right) {
-    void swap(char**, int, int);
+int numcmp(const char *s1, const char *s2) {
+    double v1, v2;
+    v1 = atof(s1);
+    v2 = atof(s2);
+    if (v1 < v2) return -1;
+    else if (v1 > v2) return 1;
+    else return 0;
+}
+void quicksort(void *v[], int left, int right, int (*comp)(void*,void*)) {
+    void swap(void**, int, int);
     // do nothing if array contains fewer than two elements
     if (left >= right) return;
     swap(v,left,(left+right)/2);
     int last = left;
     for (int i = left+1; i <= right; i++)
-        if (strcmp(v[i], v[left]) < 0) swap(v,++last,i);
+        if ((*comp)(v[i],v[left])<0) swap(v,++last,i);
     swap(v,left,last);
-    quicksort(v,left,last-1);
-    quicksort(v,last+1,right);
+    quicksort(v,left,last-1,comp);
+    quicksort(v,last+1,right,comp);
 }
 
 int readlines(char **lineptr, int nlines, bool *ok) {
@@ -54,11 +62,15 @@ int main(int argc, char *argv[])
     // allocate data structure
     char **lineptr = (char**) malloc(sizeof(char*) * NLINES);
     int nlines;
+    int numeric;
+    if (argc > 1 && strcmp(argv[1],"-n") == 0) numeric = 1;
     // read, process, & write lines
     bool ok = true;
     if ((nlines = readlines(lineptr, NLINES, &ok)) >= 0) {
-        quicksort(lineptr,0,nlines-1);
+        quicksort((void**)lineptr,0,nlines-1,
+            (int (*)(void*,void*))(numeric ? numcmp : strcmp));
         writelines(lineptr,nlines);
+        afree(*lineptr);
     }
     printf("nlines = %d\n", nlines);
     printf("were all lines processed? %s\n", ok == 1 ? "true" : "false");
@@ -73,40 +85,7 @@ int main(int argc, char *argv[])
     free(lineptr);
 }
 
-void swap(char **v, int i, int j) {
-    char *temp = v[i];
+void swap(void **v, int i, int j) {
+    void *temp = v[i];
     v[i] = v[j], v[j] = temp;
-}
-
-int readlines1(char **lineptr, int nlines) {
-    int i = 0;
-    int size;
-    for (; i < nlines; i++) {
-        char *line;
-        if ((line = alloc(MAXLINE)) == 0 || (size = getLine(line,MAXLINE)) == 0) {
-            if (size == 0) afree(line);
-            return i;
-        }
-        *lineptr++ = line;
-    }
-    return i;
-}
-
-int readlines2(char **lineptr, int nlines) {
-    static char *line = NULL;
-    if (line == 0) line = alloc(MAXLINE);
-    if (line == 0) {
-        fprintf(stderr, "Not enough memory\n");
-        return 0;
-    }
-    int size = 0;
-    int i = 0;
-    for (; i < nlines; i++) {
-        size = getLine(line,MAXLINE);
-        if (size == 0 || (*lineptr = alloc(size+1)) == 0) {
-            return i;
-        }
-        strcpy(*lineptr++,line);
-    }
-    return i;
 }

@@ -1,7 +1,7 @@
 /* Sat Jul 25 12:37:36 PM IDT 2026 */
 /* By: vnammour */
 #include <stddef.h>
-#define BUFSIZE 8192
+#define BUFSIZE 10000
 static char allocbuf[BUFSIZE];
 static char *allocp = allocbuf;
 
