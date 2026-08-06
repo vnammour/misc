@@ -17,6 +17,20 @@ Node *previous(Node *head, Node *n) {
     return prev;
 }
 
+void swap(Node **head, Node *n, Node *q) {
+    if (n == q) return;
+    Node *pn = previous(*head, n);
+    Node *pq = previous(*head, q);
+    if (pn == NULL && pq == NULL) return;
+    // update head if needed
+    if (n == *head) *head = q;
+    else if (q == *head) *head = n;
+    // swap
+    Node *temp = q->next;
+    if (pn != NULL) pn->next = q; q->next = n->next;
+    if (pq != NULL) pq->next = n; n->next = temp;
+}
+
 Node *pushback(Node *head, int data) {
     Node *node = (Node*) malloc(sizeof(Node));
     node->next = NULL, node->data = data;
@@ -65,4 +79,11 @@ int main(int argc, char *argv[])
     printlist(five = find(head,5));
     Node *pf = previous(head, five);
     printlist(pf);
+    Node *n2 = find(head,2), *n8 = find(head,8);
+    swap(&head,n2,n8);
+    printlist(head);
+    printf("n2->data = %d\n", n2->data);
+    Node *n0 = find(head,0);
+    swap(&head,n0,n2);
+    printlist(head);
 }
