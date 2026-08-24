@@ -34,7 +34,7 @@ void swap(Node **head, Node *n, Node *q) {
 Node *pushback(Node *head, int data) {
     Node *node = (Node*) malloc(sizeof(Node));
     node->next = NULL, node->data = data;
-    Node *prev, *next;
+    Node *prev = NULL, *next;
     for (next = head; next != NULL; prev = next, next = next->next);
     if (prev != NULL) prev->next = node;
     else head = node;
@@ -48,8 +48,7 @@ Node *pushfront(Node *head, int data) {
 }
 Node *reverse(Node *head) {
     if (head == NULL) return 0;
-    Node *x = head, *y;
-    y = x->next;
+    Node *x = head, *y = x->next;
     while (y != NULL) {
         Node *z = y->next;
         y->next = x;
@@ -68,7 +67,7 @@ void printlist(Node *head) {
 }
 int main(int argc, char *argv[])
 {
-    printf("sizeof(Node) = %d, sizeof(Node*) = %d\n", sizeof(Node), sizeof(Node*));
+    printf("sizeof(Node) = %ld, sizeof(Node*) = %ld\n", sizeof(Node), sizeof(Node*));
     Node *head = pushback(NULL,0);
     for (int i = 1; i < 10; i++)
         head = pushfront(head,i);
