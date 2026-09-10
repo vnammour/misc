@@ -170,12 +170,19 @@ func myAtoi(s string) int {
 		}
 		num += t
 	}
-	result := int(num) * sign
+	result := 0
 	if !ok {
 		if sign < 0 {
 			result = minint
 		} else {
 			result = maxint
+		}
+	} else {
+		if (sign < 0 && num > 0) {
+			result = int(num-1) * sign
+			--result
+		} else {
+			result = int(num) * sign
 		}
 	}
 	return result
