@@ -51,6 +51,16 @@ void printtable(Node **table, int len) {
     }
 }
 
+void releasemem_list(Node *node) {
+    Node *head = node;
+    while (node != 0) {
+        Node *temp = node->next;
+        free(node);
+        node = temp;
+    }
+    head = 0;
+}
+
 void releasemem(Node **table, int len) {
     Node **p = table;
     while (p < table + len) {
@@ -108,7 +118,7 @@ Node *getindices(Node **ht, int *arr, int len, int sum) {
 
 int main(int argc, char *argv[])
 {
-    int arr[] = {2, 3, 7, 11, 15};
+    int arr[] = {2, 3, 7, 6, 11, 15};
     int len = sizeof(arr)/sizeof(arr[0]);
     Node **ht = buildtable(arr,len);
     // printtable(ht,len);
@@ -116,20 +126,5 @@ int main(int argc, char *argv[])
     Node *indices = getindices(ht,arr,len,sum);
     printlist(indices);
     releasemem(ht,len);
+    releasemem_list(indices);
 }
-/*
-Node *getindices(Node **ht, int *arr, int len, int sum) {
-    Node *head = (Node*) malloc(sizeof(Node));
-    head->value = -1, head->next = 0;
-    Node *res = head;
-    for (int i = 0; i < len; i++) {
-        int key = djb2_hash(sum - arr[i], len);
-        Node *n = ht[key];
-        if (n != 0 && (sum - arr[n->value] == arr[i])) {
-            res->next = (Node*)malloc(sizeof(Node));
-            res->next->value = n->value;
-            res = res->next;
-        }
-    }
-    return head;
-}*/
