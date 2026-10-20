@@ -11,11 +11,12 @@ typedef struct Node {
 
 typedef struct {
     Node *head;
+    Node *tail;
 } Stack;
 
 Stack *init() {
     Stack *stack = (Stack*) malloc(sizeof(Stack));
-    stack->head = 0;
+    stack->head = stack->tail = 0;
     return stack;
 }
 void release(Stack *stack) {
@@ -24,6 +25,7 @@ void release(Stack *stack) {
         free(stack->head);
         stack->head = temp;
     }
+    stack->head = stack->tail = 0;
     free(stack);
 }
 void push(Stack *stack, int data) {
@@ -33,11 +35,11 @@ void push(Stack *stack, int data) {
         return;
     }
     node->data = data, node->next = 0;
-    if (stack->head == 0) stack->head = node;
+    if (stack->head == 0) stack->head = stack->tail = node;
     else {
         Node *prev = 0, *h = stack->head;
         for (; h != 0; prev = h, h = h->next);
-        prev->next = node;
+        prev->next = stack->tail = node;
     }
 }
 int pop(Stack *stack) {
@@ -51,7 +53,7 @@ int pop(Stack *stack) {
     if (y == 0) {
         data = x->data;
         free(x);
-        stack->head = 0;
+        stack->head = stack->tail = 0;
         return data;
     }
     Node *z = y->next;
@@ -62,6 +64,7 @@ int pop(Stack *stack) {
     data = y->data;
     free(y);
     x->next = 0;
+    stack->tail = x;
     return data;
 }
 void show(Stack *stack) {
@@ -78,19 +81,24 @@ int getLine(char *s, int lim) {
     return s - p;
 }
 Node* top(Stack *stack) {
-    Node *prev = 0;
+    /*Node *prev = 0;
     for (Node *h = stack->head; h != 0; prev = h, h = h->next);
-    return prev;
+    return prev;*/
+    return stack->tail;
 }
 bool validateparen(Stack *stack, char *s, int len) {
     for (char *p = s; p < s + len; ++p) {
         if (*p == '{' || *p == '[' || *p == '(') {
             push(stack,*p);
         } else if (*p == '}' || *p == ']' || *p == ')') {
-            int c = pop(stack);
-            if (*p == '}' && c != '{' || *p == ']' && c != '[' ||
-                    *p == ')' && c != '(')
-                return false;
+            // int c = pop(stack);
+            if (stack->tail != 0) {
+                int c = stack->tail->data;
+                if (*p == '}' && c != '{' || *p == ']' && c != '[' ||
+                        *p == ')' && c != '(')
+                    return false;
+                else pop(stack);
+            } else return false;
             /*Node *p = top(stack);
             if (p == 0) return false;
             int c = p->data;
