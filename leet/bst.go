@@ -33,20 +33,45 @@ func (t *TreeNode[T]) Insert(data T) *TreeNode[T] {
 	return t
 }
 
+func (t *TreeNode[T]) InsertRec(data T) {
+	if t == nil {
+		return
+	}
+	result := t.compare(data,t.Data)
+	if result < 0 {
+		if t.Left == nil {
+			t.Left = new(TreeNode[T]{Data: data})
+		} else {
+			t.Left.InsertRec(data)
+		}
+	} else {
+		if t.Right == nil {
+			t.Right = new(TreeNode[T]{Data: data})
+		} else {
+			t.Right.InsertRec(data)
+		}
+	}
+}
+
 func (t *TreeNode[T]) compare(a,b T) int {
 	var aAny, bAny any = a, b
-	switch aAny.(type) {
+	switch vA := aAny.(type) {
 	case int:
-		return aAny.(int) - bAny.(int)
-	default: return 0
+		vB := bAny.(int)
+		if vA < vB {
+			return -1
+		}
+		return map[bool]int{true: 1, false: 0} [ vA > vB ]
+	default:
+		panic(fmt.Sprintf("unsupported type for comparison: %T", vA))
 	}
 }
 
 func (t *TreeNode[T]) InOrderTraversal(tree *TreeNode[T]) {
 	if tree != nil {
-		tree.InOrderTraversal(tree.Left)
+		t.InOrderTraversal(tree.Left)
 		fmt.Printf("%v\n", tree.Data)
-		tree.InOrderTraversal(tree.Right)
+		t.InOrderTraversal(tree.Right)
 	}
 }
 
@@ -54,9 +79,14 @@ func main() {
 	// compareints := func(a,b int) int {
 	// 	return a - b
 	// }
-	var tree *TreeNode[int]
-	for i := 0; i < 10; i++ {
-		tree = tree.Insert(i)
+	var tree *TreeNode[int] = new(TreeNode[int]{Data:3})
+	for i := 2; i > -4; i-- {
+		// tree = tree.Insert(i)
+		tree.InsertRec(i)
+	}
+	for i := 4; i < 10; i++ {
+		tree.InsertRec(i)
 	}
 	tree.InOrderTraversal(tree)
+	fmt.Printf("root's value = %d\n", tree.Data)
 }
