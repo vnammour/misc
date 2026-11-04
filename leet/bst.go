@@ -3,6 +3,7 @@
 package main
 import (
 	"fmt"
+	"ds"
 )
 
 type TreeNode[T any] struct {
@@ -75,10 +76,47 @@ func (t *TreeNode[T]) InOrderTraversal(tree *TreeNode[T]) {
 	}
 }
 
+// BFS
+func (t *TreeNode[T]) LevelOrderTraversal(tree *TreeNode[T]) {
+	if tree == nil {
+		return
+	}
+	q := new(ds.Queue[*TreeNode[T]]{})
+	q.Enqueue(tree)
+	for !q.IsEmpty() {
+		node, ok := q.Dequeue()
+		if !ok {
+			break
+		}
+		if node.Left != nil {
+			q.Enqueue(node.Left)
+		}
+		if node.Right != nil {
+			q.Enqueue(node.Right)
+		}
+		fmt.Printf("%v\n", node.Data)
+	}
+}
+
 func main() {
 	// compareints := func(a,b int) int {
 	// 	return a - b
 	// }
+	var root *TreeNode[int]
+	root = root.Insert(8)
+	root = root.Insert(3)
+	root = root.Insert(10)
+	root = root.Insert(1)
+	root = root.Insert(6)
+	root = root.Insert(14)
+	root = root.Insert(7)
+	root = root.Insert(4)
+	root = root.Insert(13)
+	// root.InOrderTraversal(root)
+	root.LevelOrderTraversal(root)
+}
+
+func test_insertrec() {
 	var tree *TreeNode[int] = new(TreeNode[int]{Data:3})
 	for i := 2; i > -4; i-- {
 		// tree = tree.Insert(i)

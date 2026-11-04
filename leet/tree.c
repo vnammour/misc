@@ -7,6 +7,7 @@ typedef struct Node {
     struct Node *left, *right;
     struct Node *parent;
 } Node;
+
 Node *insert(Node *root, int data) {
     Node *node = (Node*)malloc(sizeof(Node));
     node->data = data, node->left = node->right = node->parent = 0;
@@ -22,6 +23,7 @@ Node *insert(Node *root, int data) {
     node->parent = prev;
     return root;
 }
+
 void inordertraversal(Node *root) {
     if (root != 0) {
         inordertraversal(root->left);
@@ -29,6 +31,7 @@ void inordertraversal(Node *root) {
         inordertraversal(root->right);
     }
 }
+
 int main(int argc, char *argv[])
 {
     Node *root = (Node*) malloc(sizeof(Node));
