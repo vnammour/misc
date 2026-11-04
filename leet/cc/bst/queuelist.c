@@ -1,20 +1,7 @@
 /* Tue Nov  3 03:59:21 PM IST 2026 */
 /* By: vnammour */
-#include <stdio.h>
 #include <stdlib.h>
-/*typedef struct point {
-    int x, y;
-}point;*/
-typedef enum {none = 0, underflow = 1, overflow = 2} errcode;
-typedef int Type;
-typedef struct Node {
-    Type data;
-    struct Node *next;
-} Node;
-
-typedef struct Queue {
-    Node *head;
-} Queue;
+#include "common.h"
 
 errcode err = none;
 
@@ -57,7 +44,3 @@ bool isempty(Queue *q) {
     }
     printf("isempty = %d\n", isempty(q));
 }*/
-
-int main(int argc, char *argv[])
-{
-}
