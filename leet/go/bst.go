@@ -98,6 +98,66 @@ func (t *TreeNode[T]) LevelOrderTraversal(tree *TreeNode[T]) {
 	}
 }
 
+func (t *TreeNode[T]) Search(data T) *TreeNode[T] {
+	cmp := t.compare(data,t.Data)
+	for t != nil && cmp != 0 {
+		if cmp < 0 { 
+			t.Left.Search(data)
+		} else {
+			t.Right.Search(data)
+		}
+	}
+	return t
+}
+
+func (t *TreeNode[T]) SearchRec(data T) *TreeNode[T] {
+	cmp := t.compare(data,t.Data)
+	if t == nil || cmp == 0 {
+		return t
+	}
+	if cmp < 0 {
+		return t.Left.SearchRec(data)
+	} else {
+		return t.Right.SearchRec(data)
+	}
+}
+
+func (t *TreeNode[T]) Minimum() *TreeNode[T] {
+	var paren *TreeNode[T] = nil
+	for ; t != nil; paren,t = t, t.Left {}
+	return paren
+}
+
+func (t *TreeNode[T]) Maximum() *TreeNode[T] {
+	var paren *TreeNode[T] = nil
+	for ; t != nil; paren,t = t, t.Right {}
+	return paren
+}
+
+func (t *TreeNode[T]) Predecessor() *TreeNode[T] {
+	if t == nil {
+		return t
+	}
+	if t.Left != nil {
+		return t.Left.Maximum()
+	}
+	p := t.Parent
+	for ; p != nil && t == p.Left; t, p = p, p.Parent {}
+	return p
+}
+
+func (t *TreeNode[T]) Successor() *TreeNode[T] {
+	if t == nil {
+		return t
+	}
+	if t.Right != nil {
+		return t.Right.Minimum()
+	}
+	p := t.Parent
+	for ; p != nil && t == p.Right; t, p = p, p.Parent {}
+	return p
+}
+
 func main() {
 	// compareints := func(a,b int) int {
 	// 	return a - b

@@ -28,17 +28,34 @@ void inordertraversal(TreeNode *root) {
     }
 }
 extern errcode err;
+// Breadth-first traversal (BFS)
 void levelordertraversal(TreeNode *root) {
     if (root == 0) return;
     Queue *q = (Queue*)malloc(sizeof(Queue));
     enqueue(q,root);
     while (!isempty(q)) {
         Type tnode = dequeue(q);
-        if (err == underflow) break;
+        if (err != none) break;
         if (tnode->left != 0) enqueue(q,tnode->left);
         if (tnode->right != 0) enqueue(q,tnode->right);
         printf("%d\n", tnode->data);
     }
+}
+
+// recursive search
+TreeNode *search(TreeNode *root, int data) {
+    if (root == 0 || root->data == data) return root;
+    if (data < root->data) return search(root->left,data);
+    else return search(root->right,data);
+}
+
+// iterative search
+TreeNode *isearch(TreeNode *root, int data) {
+    while (root != 0 && root->data != data) {
+        if (data < root->data) root = root->left;
+        else root = root->right;
+    }
+    return root;
 }
 
 int main(int argc, char *argv[])
@@ -55,4 +72,5 @@ int main(int argc, char *argv[])
     root = insert(root,13);
     // inordertraversal(root);
     levelordertraversal(root);
+    inordertraversal(root);
 }

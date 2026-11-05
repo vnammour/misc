@@ -4,21 +4,21 @@ package ds
 import (
 	"fmt"
 )
-type linknode[T any] struct {
+type LinkNode[T any] struct {
 	datalink T
-	nextlink *linknode[T]
+	nextlink *LinkNode[T]
 }
 
 type Queue[T any] struct {
-	head *linknode[T]
+	head *LinkNode[T]
 }
 
 func (q *Queue[T]) Enqueue(data T) {
 	if q == nil {
 		return
 	}
-	node := new(linknode[T]{datalink: data, nextlink: nil})
-	var prev, next *linknode[T] = nil, q.head
+	node := new(LinkNode[T]{datalink: data, nextlink: nil})
+	var prev, next *LinkNode[T] = nil, q.head
 	for ; next != nil; prev, next = next, next.nextlink{}
 	if prev == nil {
 		q.head = node
@@ -32,7 +32,7 @@ func (q *Queue[T]) Dequeue() (T,bool){
 	if q == nil || q.head == nil {
 		return zero,false 
 	}
-	var temp *linknode[T]
+	var temp *LinkNode[T]
 	temp, q.head = q.head, q.head.nextlink
 	data := temp.datalink
 	temp, temp.nextlink = nil, nil
