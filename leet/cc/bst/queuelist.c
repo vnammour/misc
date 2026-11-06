@@ -1,6 +1,7 @@
 /* Tue Nov  3 03:59:21 PM IST 2026 */
 /* By: vnammour */
 #include <stdlib.h>
+#include <stdbool.h>
 #include "common.h"
 
 errcode err = none;
