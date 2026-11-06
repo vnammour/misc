@@ -20,6 +20,51 @@ run in O(lg n) time, allow the heap data structure to be used as a priority queu
 */
 package main
 import (
+	"fmt"
 )
 func main() {
+	// arr := []int{3,25,1,20,2}
+	// arr := []int{1,5,8,13,17,22,31}
+	N := 1000000000
+	arr := make([]int,N)
+	for i:=0; i < N; i++ {
+		arr[i] = i
+	}
+	count := buildmaxheap(arr)
+	// fmt.Println(arr)
+	fmt.Printf("count = %d\n", count)
+	fmt.Printf("count = %d\n", 2*N-count)
+}
+
+func buildmaxheap(arr []int) int {
+	i := (len(arr)-1) >> 1
+	count := 0
+	for i >= 0 {
+		count++
+		count += heapify(arr,i,len(arr))
+		i--
+	}
+	return count
+}
+
+func heapify(arr []int, i, maxlen int) int {
+	count := 0
+	for i < maxlen {
+		count++
+		index := i
+		left := i<<1+1
+		right := left+1
+		if left < maxlen && arr[left] > arr[index] {
+			index = left
+		}
+		if right < maxlen && arr[right] > arr[index] {
+			index = right
+		}
+		if index == i {
+			return count
+		}
+		arr[i],arr[index] = arr[index],arr[i]
+		i = index
+	}
+	return count
 }
