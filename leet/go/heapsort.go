@@ -30,8 +30,19 @@ func main() {
 	for i:=0; i < N; i++ {
 		arr[i] = i
 	}
-	buildmaxheap(arr)
+	// buildmaxheap(arr)
+	heapsort(arr)
 	fmt.Println(arr)
+}
+
+func heapsort(arr []int) {
+	buildmaxheap(arr)
+	lastindex := len(arr) - 1
+	for lastindex > 0 {
+		arr[0],arr[lastindex] = arr[lastindex],arr[0]
+		heapify(arr,0,lastindex)
+		lastindex--
+	}
 }
 
 func buildmaxheap(arr []int) {
