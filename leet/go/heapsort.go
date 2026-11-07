@@ -25,32 +25,25 @@ import (
 func main() {
 	// arr := []int{3,25,1,20,2}
 	// arr := []int{1,5,8,13,17,22,31}
-	N := 1000000000
+	N := 1000
 	arr := make([]int,N)
 	for i:=0; i < N; i++ {
 		arr[i] = i
 	}
-	count := buildmaxheap(arr)
-	// fmt.Println(arr)
-	fmt.Printf("count = %d\n", count)
-	fmt.Printf("count = %d\n", 2*N-count)
+	buildmaxheap(arr)
+	fmt.Println(arr)
 }
 
-func buildmaxheap(arr []int) int {
+func buildmaxheap(arr []int) {
 	i := (len(arr)-1) >> 1
-	count := 0
 	for i >= 0 {
-		count++
-		count += heapify(arr,i,len(arr))
+		heapify(arr,i,len(arr))
 		i--
 	}
-	return count
 }
 
-func heapify(arr []int, i, maxlen int) int {
-	count := 0
+func heapify(arr []int, i, maxlen int) {
 	for i < maxlen {
-		count++
 		index := i
 		left := i<<1+1
 		right := left+1
@@ -61,10 +54,9 @@ func heapify(arr []int, i, maxlen int) int {
 			index = right
 		}
 		if index == i {
-			return count
+			return
 		}
 		arr[i],arr[index] = arr[index],arr[i]
 		i = index
 	}
-	return count
 }
