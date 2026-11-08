@@ -71,3 +71,19 @@ func heapify(arr []int, i, maxlen int) {
 		i = index
 	}
 }
+
+func heapify_rec(arr []int, i, maxlen int) {
+	index := i
+	left := i<<1+1
+	right := left+1
+	if left < maxlen && arr[left] > arr[i] {
+		index = left
+	}
+	if right < maxlen && arr[right] > arr[index] {
+		index = right
+	}
+	if index != i {
+		arr[i],arr[index] = arr[index],arr[i]
+		heapify_rec(arr,index,maxlen)
+	}
+}
