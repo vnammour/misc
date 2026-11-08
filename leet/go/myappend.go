@@ -7,6 +7,7 @@ import (
 func main() {
 	arr := []int{1,2,3}
 	arr = myappend(arr,[]int{4,5,6,7,8}...)
+	arr = myappend(arr,2)
 	fmt.Println(arr)
 }
 
