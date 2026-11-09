@@ -8,7 +8,7 @@ import (
 )
 func main() {
 	arr := []byte{'a','b'}
-	set := subsets(arr)
+	set := superset(arr)
 	fmt.Printf("[")
 	for i := 0; i < len(set); i++ {
 		if i == len(set) - 1 {
@@ -26,20 +26,21 @@ func main() {
 	}*/
 }
 
-func subsets(items []byte) [][]byte {
+// backtracking
+func superset[T any](items []T) [][]T {
 	expo := int(math.Pow(2.0,float64(len(items))))
-	set := make([]byte,0,len(items))
-	super := make([][]byte,0,expo)
+	set := make([]T,0,len(items))
+	super := make([][]T,0,expo)
 	var f func(int)
 	f = func(index int) {
 		if index >= len(items) {
-			fmt.Printf("f(%d): >%s<\n", index, set)
+			fmt.Printf("f(%d): >%v<\n", index, set)
 			// super = append(super,set) // <-- notice what's wrong !
-			super = append(super, append([]byte(nil),set...))
+			super = append(super, append([]T(nil),set...))
 			return
 		}
 		set = append(set,items[index])
-		fmt.Printf("f(%d): >%s<\n", index, set)
+		fmt.Printf("f(%d): >%v<\n", index, set)
 		f(index + 1)
 		set = set[:len(set)-1]
 		f(index + 1)
