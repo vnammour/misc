@@ -7,6 +7,16 @@ import (
 	"fmt"
 )
 func main() {
+	bytetest_superset()
+	/*s := new(ds.Stack[[]byte])
+	s.Push(make([]byte,0,10))
+	buf := s.Top()
+	for _,b := range arr {
+		buf = append(buf,b)
+	}*/
+}
+
+func bytetest_superset() {
 	arr := []byte{'a','b'}
 	set := superset(arr)
 	fmt.Printf("[")
@@ -18,12 +28,6 @@ func main() {
 		}
 	}
 	fmt.Printf("]\n")
-	/*s := new(ds.Stack[[]byte])
-	s.Push(make([]byte,0,10))
-	buf := s.Top().Data
-	for _,b := range arr {
-		buf = append(buf,b)
-	}*/
 }
 
 // backtracking

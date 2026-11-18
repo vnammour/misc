@@ -1,10 +1,10 @@
 /* Sun Nov  8 06:05:14 PM IST 2026 */
 /* By: vnammour */
 package ds
-
+// not exported
 type Node[T any] struct {
-	Data T
-	next *Node[T] // not exported
+	data T
+	next *Node[T]
 }
 type Stack[T any] struct {
 	ptr *Node[T]
@@ -18,16 +18,23 @@ func (s *Stack[T]) Push(data T) {
 	s.ptr = node
 }
 
-func (s *Stack[T]) Pop() *Node[T] {
+func (s *Stack[T]) Pop() T {
+	var data T
 	var node *Node[T] = s.ptr
 	if node != nil {
 		s.ptr, s.ptr.next = s.ptr.next, nil
+		data = node.data
+		node = nil
 	}
-	return node
+	return data
 }
 
-func (s *Stack[T]) Top() *Node[T] {
-	return s.ptr
+func (s *Stack[T]) Top() T {
+	var zero T
+	if s.ptr != nil {
+		zero = s.ptr.data
+	}
+	return zero
 }
 
 func (s *Stack[T]) IsEmpty() bool {
