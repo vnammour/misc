@@ -14,6 +14,7 @@ typedef struct Node {
     Type data;
 } Node;
 Node *pushfront(Node *head, int key, Type data);
+Node *pushback(Node *head, int key, Type data);
 void freelist(Node *curr);
 bool pluck(Node **node, int key);
 void printlist(Node *head);
@@ -25,6 +26,15 @@ Node *pushfront(Node *head, int key, Type data) {
     if (head == 0) return n;
     n->next = head;
     head = n;
+    return head;
+}
+Node *pushback(Node *head, int key, Type data) {
+    Node *n = (Node*) malloc(sizeof(Node));
+    n->key = key, n->data = data, n->next = 0;
+    if (head == 0) return n;
+    Node *prev = head, *next = head->next;
+    for (; next != 0; prev = next, next = next->next);
+    prev->next = n;
     return head;
 }
 bool pluck(Node **head, int key) {
