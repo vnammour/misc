@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 // typedef int Type;
-#ifndef Type
-#define Type int
+#ifndef LL_VALUE_TYPE
+typedef int Type
 #endif
 typedef struct Node {
     struct Node *next;
@@ -15,7 +15,7 @@ typedef struct Node {
 } Node;
 Node *pushfront(Node *head, int key, Type data);
 void freelist(Node *curr);
-Node *pluck(Node *node);
+bool pluck(Node **node, int key);
 void printlist(Node *head);
 #endif
 #ifdef LINKEDLIST_IMPLEMENTATION
@@ -40,19 +40,6 @@ bool pluck(Node **head, int key) {
         curr = &(*curr)->next;
     }
     return false;
-}
-Node *pluck(Node *node, int key) {
-    Node *curr = node, *prev = NULL;
-    for (; curr != 0 && curr->key != key; prev = curr, curr = curr->next);
-    if (curr != NULL) {
-        Type zero = {};
-        if (prev == NULL) prev = curr->next;
-        else prev->next = curr->next;
-        curr->next = NULL;
-        curr->data = zero;
-        free(curr);
-    }
-    return prev;
 }
 void freelist(Node *curr) {
     while (curr != 0) {

@@ -15,8 +15,10 @@ void init(int cap);
 void destroy();
 void set(int key, Type value);
 bool get(int key, Type *out_value);
-void printhashtable();
+#define contains(key) get(key,NULL)
+bool rm(int key);
 #define del(key) rm(key)
+void printhashtable();
 #endif
 #ifdef HASHTABLE_IMPLEMENTATION
 void init(int cap) {
@@ -39,9 +41,7 @@ void destroy() {
         ht->ptr[i] = 0;
     }
     free(ht->ptr);
-    ht->ptr = 0;
-    ht->cap = 0;
-    ht->len = 0;
+    ht->ptr = 0, ht->cap = 0, ht->len = 0;
     free(ht);
     ht = 0;
 }
@@ -52,10 +52,18 @@ static inline int hash(int data) {
     uint32_t hash_value = (uint32_t)data * GOLDEN_RATIO_PRIME;
     return (int)(hash_value % (uint32_t)ht->cap);
 }
-void set(int key, Type value) {
+void set(int key, Type data) {
     int hashkey = hash(key);
-    if (ht->ptr[hashkey] == 0) ++ht->len;
-    ht->ptr[hashkey] = pushfront(ht->ptr[hashkey],key, value);
+    Node *p = ht->ptr[hashkey];
+    while (p != NULL) {
+        if (p->key == key) {
+            p->data = data;
+            return;
+        }
+        p = p->next;
+    }
+    ht->ptr[hashkey] = pushfront(ht->ptr[hashkey],key,data);
+    ++ht->len;
 }
 /*
  * Checking if (out_value != NULL) also lets callers use get(key, NULL)
@@ -78,6 +86,7 @@ bool rm(int key) {
     return isremoved;
 }
 void printhashtable() {
+    if (ht == NULL) return;
     printf("cap = %d, len = %d\n", ht->cap, ht->len);
     int i = 0;
     for (Node **p = ht->ptr; p < ht->ptr + ht->cap; p++) {
