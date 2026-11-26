@@ -64,6 +64,7 @@ void set(int key, Type data) {
     }
     ht->ptr[hashkey] = pushfront(ht->ptr[hashkey],key,data);
     ++ht->len;
+    // printf("vjn:set(%d): len = %d\n", hashkey,ht->len);
 }
 /*
  * Checking if (out_value != NULL) also lets callers use get(key, NULL)
@@ -82,7 +83,11 @@ bool get(int key, Type *out_value) {
 bool rm(int key) {
     int hashkey = hash(key);
     bool isremoved = pluck(&ht->ptr[hashkey],key);
-    if (isremoved && ht->ptr[hashkey] == NULL) --ht->len;
+    // Line below is false since for each key removed
+    // length has to be decremented.
+    // if (isremoved && ht->ptr[hashkey] == NULL) --ht->len;
+    if (isremoved) --ht->len;
+    // printf("vjn: rm(%d): len = %d\n", hashkey,ht->len);
     return isremoved;
 }
 void printhashtable() {

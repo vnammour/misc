@@ -6,7 +6,7 @@
 #include <stdlib.h>
 // typedef int Type;
 #ifndef LL_VALUE_TYPE
-typedef int Type
+typedef int Type;
 #endif
 typedef struct Node {
     struct Node *next;
