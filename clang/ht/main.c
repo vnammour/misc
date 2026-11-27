@@ -19,24 +19,18 @@ int main(int argc, char *argv[])
     init(10);
     for (int i = 0; i < len; i++) {
         Node *node = 0;
-        if (get(arr[i],&node)) {
-            node = pushfront(node,i,0);
-            set(arr[i],node);
-            // printlist(node,0);
-        }
+        if (get(arr[i],&node))
+            node = pushback(node,i,0);
         else {
             node = pushfront(node,i,0);
             set(arr[i],node);
         }
     }
-    Node *n = 0;
-    get(10,&n);
-    printlist(n,printnode);
-    /*for (int i = 0; i < len; i++) {
+    for (int i = 0; i < len; i++) {
         Node *node = 0;
         if(get(arr[i],&node)) {
             printf("key %d: ", arr[i]);
             printlist(node, 0);
         }
-    }*/
+    }
 }
