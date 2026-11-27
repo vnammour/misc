@@ -4,7 +4,7 @@
 #define HASHMAP_IMPLEMENTATION
 #define LL_DATA_TYPE
 typedef struct Node* Type;
-#include "hashmap.h"
+#include "../hashmap.h"
 void printnode(Node *node) {
     while (node != 0) {
         printf("%d->", node->key);
@@ -26,11 +26,21 @@ int main(int argc, char *argv[])
             set(arr[i],node);
         }
     }
+    printhashmap(printnode);
     for (int i = 0; i < len; i++) {
         Node *node = 0;
         if(get(arr[i],&node)) {
             printf("key %d: ", arr[i]);
             printlist(node, 0);
+            freelist(&node,0);
+            printlist(node,0);
+            rm(arr[i]);
         }
+    }
+    printhashmap(printnode);
+    for (int i = 0; i < len; i++) {
+        Node *node = 0;
+        if (get(arr[i],&node))
+            printlist(node,0);
     }
 }

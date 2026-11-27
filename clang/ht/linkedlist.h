@@ -40,7 +40,7 @@ bool pluck(Node **head, int key, Type *out_data) {
         if ((*curr)->key == key) {
             Node *target = *curr;
             *curr = (*curr)->next;
-            target->next = 0;
+            if (out_data != 0) *out_data = target->data;
             free(target);
             return true;
         }
@@ -60,7 +60,7 @@ void printlist(Node *head, void (*printdata)(Type data)) {
     while (head != NULL) {
         printf("[%d: ", head->key);
         if (printdata != NULL) printdata(head->data);
-        else printf("%d->", head->data);
+        //else printf("%d->", head->data);
         printf("]->");
         head = head->next;
     }

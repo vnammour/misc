@@ -13,6 +13,8 @@ static HashMap ht;
 void init(unsigned int);
 void set(int key, Type data);
 bool get(int key, Type *out_data);
+bool rm(int key);
+void printhashmap(void (*printdata)(Type data));
 #endif
 #ifdef HASHMAP_IMPLEMENTATION
 void init(unsigned int cap) {
@@ -30,6 +32,7 @@ void set(int key, Type data) {
     int hashkey = hash(key);
     // printf("hashkey = %d\n", hashkey);
     Node *itr = ht.ptr[hashkey];
+    if (itr == 0) ++ht.len;
     while (itr != 0) {
         if (itr->key == key) {
             itr->data = data;
@@ -38,7 +41,6 @@ void set(int key, Type data) {
         itr = itr->next;
     }
     ht.ptr[hashkey] = pushfront(ht.ptr[hashkey],key,data);
-    ++ht.len;
 }
 bool get(int key, Type *out_data) {
     int hashkey = hash(key);
@@ -51,5 +53,16 @@ bool get(int key, Type *out_data) {
         itr = itr->next;
     }
     return false;
+}
+bool rm(int key) {
+    int hashkey = hash(key);
+    bool isremoved = pluck(&ht.ptr[hashkey],key,0); 
+    if (isremoved && ht.ptr[hashkey] == NULL) --ht.len;
+    return isremoved;
+}
+void printhashmap(void (*printdata)(Type data)) {
+    printf("cap = %d, len = %d\n", ht.cap, ht.len);
+    for (Node **itr = ht.ptr; itr < ht.ptr + ht.cap; itr++)
+        if (*itr != 0) printlist(*itr,printdata);
 }
 #endif

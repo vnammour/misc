@@ -8,7 +8,7 @@ typedef struct Point {
     int x,y;
 } Point;
 typedef Point *Type;
-#include "linkedlist.h"
+#include "../linkedlist.h"
 void printpoint(Point *p) {
     if (p != NULL)
         printf("(%d,%d)", p->x,p->y);
