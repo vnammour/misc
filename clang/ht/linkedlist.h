@@ -34,27 +34,6 @@ Node *pushback(Node *head, int key, Type data) {
     prev->next = n;
     return head;
 }
-/*bool pluck(Node **head, int key, Type *out_data) {
-    if (head == NULL || *head == NULL) return false;
-    if ((*head)->key == key) {
-        *out_data = (*head)->data;
-        Node *h = (*head)->next;
-        free(*head);
-        *head = h;
-        return true;
-    }
-    Node *prev = *head, *curr = (*head)->next;
-    while (curr != 0) {
-        if (curr->key == key) {
-            *out_data = curr->data;
-            prev->next = curr->next;
-            free(curr);
-            return true;
-        }
-        prev = curr, curr = curr->next;
-    }
-    return false;
-}*/
 bool pluck(Node **head, int key, Type *out_data) {
     Node **curr = head;
     while (*curr != NULL) {
@@ -66,36 +45,15 @@ bool pluck(Node **head, int key, Type *out_data) {
             return true;
         }
         curr = &(*curr)->next;
-        // *curr = (*curr)->next;
     }
     return false;
 }
-/*bool pluck(Node **head, int key, Type *out_data) {
-    Node *prev = 0, *itr = *head;
-    while (itr != NULL) {
-        if (itr->key == key) {
-            if (*head == itr) {
-                printf("before: head->key = %d\n", (*head)->key);
-                *head = (*head)->next;
-                printf("after: head->key = %d\n", (*head)->key);
-            } else {
-                prev->next = itr->next;
-            }
-            *out_data = itr->data;
-            free(itr);
-            return true;
-        }
-        prev = itr;
-        itr = itr->next;
-    }
-    return false;
-}*/
 void freelist(Node **head, void (*freetype)(Type data)) {
     while (*head != NULL) {
-        Node *curr = (*head)->next;
+        Node *next = (*head)->next;
         if (freetype != NULL) freetype((*head)->data);
         free(*head);
-        *head = curr;
+        *head = next;
     }
 }
 void printlist(Node *head, void (*printdata)(Type data)) {
@@ -108,14 +66,6 @@ void printlist(Node *head, void (*printdata)(Type data)) {
     }
     printf("//\n");
 }
-/*void freelist(Node *head, void (*freetype)(Type data)) {
-    while (head != NULL) {
-        Node *curr = head->next;
-        if (freetype != NULL) freetype(head->data);
-        free(head);
-        head = curr;
-    }
-}*/
 #endif
 /*
  * if data is composite, I will need operators ==, <, >, <=, >= defined for data type.

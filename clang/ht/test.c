@@ -61,6 +61,13 @@ int main(int argc, char *argv[])
     }
     printlist(list,printpoint);
     Point *p = 0;
-    pluck(&list,3,&p);
+    int i = 0;
+    while (list != 0) pluck(&list,i++,&p);
+    pluck(&list,4,&p);
     printlist(list,printpoint);
+    freelist(&list,freepoint);
+    printlist(list,printpoint);
+    printf("is list null? %d\n", list == NULL);
+    printf("address = %p\n", list);
+    freelist(&list,freepoint);
 }
